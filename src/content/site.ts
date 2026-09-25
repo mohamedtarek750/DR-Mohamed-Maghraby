@@ -1,6 +1,9 @@
 /**
  * Single source of truth for factual data about the practice.
  *
+ * `verified` holds facts from the doctor's own public, first-party sources.
+ * `clinic` (further down) holds the clinic's own published contact text.
+ *
  * EVERY value in `verified` was taken from a public, first-party source:
  *   - https://www.mohamedmaghraby.com  (the doctor's own site)
  *   - https://www.instagram.com/mohamed.maghrabyy  (verified account bio)
@@ -109,24 +112,130 @@ export const verified = {
 } as const;
 
 /**
+ * Clinic contact details, from the clinic's own published contact text,
+ * supplied by the site owner on 2026-09-25. Every number, day and time is
+ * reproduced exactly; only spelling was standardised (الجهه → الجهة).
+ * Both map links were resolved to confirm where they point:
+ *   - Mohandessin: a pin at 30.0571560, 31.2054020
+ *   - New Cairo:   Google's listing "Cairo Medical Center (CMC), N Teseen,
+ *                  New Cairo 1, Cairo Governorate 11835"
+ */
+export const clinic = {
+  /** For inquiries and booking. The source does NOT say these are WhatsApp
+   *  numbers, so the site never labels them as such. */
+  phones: ['01142009433', '01055011901', '01020805974', '01035563448'],
+  /** First in the clinic's list; every single-button "call" CTA dials it.
+   *  Change here if the clinic wants another line to lead. */
+  primaryPhone: '01142009433',
+  /** Source spelling. Used only in structured data (alternateName); the page
+   *  keeps مغربي, the spelling on his verified social accounts. */
+  practiceNameAsPublished: 'عيادات د. محمد المغربى',
+  /** When the phones are answered. The source gives no days, only times. */
+  contactHours: {
+    ar: 'من ١ مساءً إلى ١١ مساءً',
+    en: '1 pm to 11 pm',
+    /** Compact form for tight spots (sticky bar, button sublabels). */
+    shortAr: 'من ١ إلى ١١ مساءً',
+    shortEn: '1 pm to 11 pm',
+  },
+  branches: [
+    {
+      id: 'mohandessin',
+      area: { ar: 'المهندسين', en: 'Mohandessin' },
+      address: {
+        ar: '٢٢ شارع جامعة الدول العربية الرئيسي، الدور الثالث',
+        en: '22 Gameat El Dewal El Arabia Street (main road), 3rd floor',
+      },
+      landmark: {
+        ar: 'الجهة المقابلة لماكدونالدز وكوستا مباشرة',
+        en: 'Directly opposite McDonald’s and Costa',
+      },
+      days: {
+        ar: 'السبت، الأحد، الاثنين، الثلاثاء',
+        en: 'Saturday, Sunday, Monday, Tuesday',
+      },
+      times: {
+        ar: 'من ١ إلى ٣ مساءً، ومن ٦ إلى ٨ مساءً',
+        en: '1 to 3 pm and 6 to 8 pm',
+      },
+      mapUrl: 'https://maps.app.goo.gl/C5yDsebMU7fTZDhm9?g_st=iwb',
+      /** From the map link itself. */
+      geo: { latitude: 30.057156, longitude: 31.205402 },
+      /** Machine-readable copy of days/times above, for structured data. */
+      openingHours: {
+        dayOfWeek: ['Saturday', 'Sunday', 'Monday', 'Tuesday'],
+        slots: [
+          ['13:00', '15:00'],
+          ['18:00', '20:00'],
+        ],
+      },
+      postal: {
+        streetAddress: '22 Gameat El Dewal El Arabia Street, 3rd floor',
+        addressLocality: 'Mohandessin',
+        addressCountry: 'EG',
+      },
+    },
+    {
+      id: 'new-cairo',
+      area: { ar: 'التجمع الخامس', en: 'Fifth Settlement, New Cairo' },
+      /** "CMC", exactly as the source writes it. Not expanded on the page:
+       *  "Cairo Medical Center" could send people to the unrelated hospital of
+       *  that name in Heliopolis. */
+      address: {
+        ar: 'CMC، الدور الأرضي، عيادة رقم ١',
+        en: 'CMC, ground floor, clinic no. 1',
+      },
+      landmark: null,
+      days: { ar: 'الأربعاء', en: 'Wednesday' },
+      times: {
+        ar: 'من ٢ إلى ٤ مساءً، ومن ٦ إلى ٨ مساءً',
+        en: '2 to 4 pm and 6 to 8 pm',
+      },
+      mapUrl: 'https://maps.app.goo.gl/zC3WKCgA9p9qcY219',
+      geo: null,
+      openingHours: {
+        dayOfWeek: ['Wednesday'],
+        slots: [
+          ['14:00', '16:00'],
+          ['18:00', '20:00'],
+        ],
+      },
+      /** From Google's listing for the clinic's own map link ("Cairo Medical
+       *  Center (CMC), N Teseen, New Cairo 1, Cairo Governorate 11835"). Used
+       *  only in structured data, to help geocoding. Confirm with the clinic. */
+      postal: {
+        streetAddress: 'Cairo Medical Center (CMC), North Teseen Street, ground floor, clinic no. 1',
+        addressLocality: 'New Cairo',
+        addressRegion: 'Cairo',
+        postalCode: '11835',
+        addressCountry: 'EG',
+      },
+    },
+  ],
+  /*
+   * Also in the source, and written straight into the copy (dictionary.ts):
+   *   - both branches see patients by prior booking (بالحجز المسبق)
+   *   - online consultations over Zoom, from anywhere inside or outside Egypt
+   *   - "متاح حجز كشف مستعجل بدون حجز مسبق": an urgent CLINIC visit, which is
+   *     not the same thing as a medical emergency
+   */
+} as const;
+
+/**
  * NOT PUBLICLY VERIFIABLE. Left null on purpose.
  * The UI checks each of these and renders nothing when the value is null.
  */
 export const pending: {
-  phone: string | null;
+  /** Do not add wa.me links until the clinic confirms which number is on
+   *  WhatsApp. The published text lists the numbers for calls only. */
   whatsapp: string | null;
-  clinics: { name: string; address: string; mapUrl?: string }[] | null;
-  hours: { days: string; time: string }[] | null;
   credentials: string[] | null;
   yearsOfExperience: number | null;
   /** Areas of care beyond the two disciplines named on his own site. */
   subspecialties: string[] | null;
   articles: { title: string; href: string; date: string }[] | null;
 } = {
-  phone: null,
   whatsapp: null,
-  clinics: null,
-  hours: null,
   credentials: null,
   yearsOfExperience: null,
   subspecialties: null,

@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import type { Dictionary } from '@/content/dictionary';
-import { verified } from '@/content/site';
-import { MailIcon } from './Icons';
+import CallButton from './CallButton';
 
 /**
  * Booking is the point of the site, so on phones it stays one thumb-tap away.
@@ -53,20 +52,21 @@ export default function MobileCta({ t }: { t: Dictionary }) {
       }`}
     >
       <div className="flex items-center gap-2.5">
-        <a
-          href="#booking"
-          className="flex-1 rounded-sm bg-ink py-3 text-center text-[14px] text-paper"
+        {/* Call first: it is how most patients book. The hours sit on the
+            button so nobody dials outside them. */}
+        <CallButton
+          label={t.nav.call}
+          sublabel={t.nav.callHoursShort}
+          cta="sticky"
           tabIndex={visible ? 0 : -1}
-        >
-          {t.nav.book}
-        </a>
+          className="flex-1"
+        />
         <a
-          href={`mailto:${verified.email}`}
-          aria-label={t.hero.secondary}
+          href="#clinics"
           tabIndex={visible ? 0 : -1}
-          className="flex h-[44px] w-[44px] items-center justify-center rounded-sm border border-ink/25 p-3 text-ink"
+          className="flex min-h-[48px] items-center justify-center rounded-sm border border-ink/25 px-4 text-[14px] text-ink"
         >
-          <MailIcon />
+          {t.nav.clinics}
         </a>
       </div>
     </div>

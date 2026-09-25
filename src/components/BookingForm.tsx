@@ -6,19 +6,23 @@ import {
   useEffect,
   useRef,
   useState,
+  type ChangeEvent,
   type FocusEvent,
   type FormEvent,
   type ReactNode,
 } from 'react';
 import type { Dictionary, Locale } from '@/content/dictionary';
+import { clinic } from '@/content/site';
 import { submitBooking, type BookingState } from '@/lib/actions';
 import {
   BOOKING_FIELDS,
+  PLACE_VALUES,
   validateBooking,
   validateField,
   type BookingErrors,
   type BookingField,
 } from '@/lib/booking';
+import CallButton from './CallButton';
 
 const control =
   'w-full scroll-mt-28 rounded-sm border bg-paper px-3.5 py-3 text-[15px] text-ink outline-none transition-colors duration-(--motion-feedback) placeholder:text-ink-mute/80 focus:border-sage-deep aria-invalid:border-[#8a3b32]';
@@ -30,12 +34,16 @@ function Field({
   id,
   label,
   error,
+  hint,
   children,
   wide = false,
 }: {
   id: string;
   label: string;
   error?: string;
+  /** Always-visible help. Its id is `${id}-hint`; the control must list it
+   *  in aria-describedby. */
+  hint?: string;
   children: ReactNode;
   wide?: boolean;
 }) {
@@ -45,6 +53,11 @@ function Field({
         {label}
       </label>
       {children}
+      {hint ? (
+        <p id={`${id}-hint`} className="mt-1.5 text-[12.5px] text-ink-mute">
+          {hint}
+        </p>
+      ) : null}
       {error ? (
         <p id={errorId(id)} className="mt-1.5 text-[13px] text-[#8a3b32]">
           {error}
@@ -115,20 +128,37 @@ export default function BookingForm({ t, locale }: { t: Dictionary; locale: Loca
     return key ? t.booking.errors[key] : undefined;
   };
 
-  const a11y = (field: BookingField) => ({
-    'aria-invalid': errors[field] ? true : undefined,
-    'aria-describedby': errors[field] ? errorId(field) : undefined,
-    onBlur,
-  });
+  const a11y = (field: BookingField, hintId?: string) => {
+    const describedBy = [errors[field] ? errorId(field) : null, hintId ?? null].filter(Boolean);
+    return {
+      'aria-invalid': errors[field] ? true : undefined,
+      'aria-describedby': describedBy.length ? describedBy.join(' ') : undefined,
+      onBlur,
+    };
+  };
+
+  // Radios can't use onBlur: a radio's value is its own even when unchecked,
+  // so leaving one would look like a valid answer. Validate on change instead.
+  const onPlaceChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const error = validateField('place', event.target.value);
+    setErrors((current) => {
+      const next = { ...current };
+      if (error) next.place = error;
+      else delete next.place;
+      return next;
+    });
+  };
+
 
   if (state.status === 'sent' || state.status === 'mailto') {
+    const sent = state.status === 'sent';
     return (
       <div role="status" className="rounded-sm border border-sage-deep/25 bg-sage-wash/60 p-7 sm:p-9">
         <h3 className="font-display text-[1.5rem] text-sage-deep">
-          {state.status === 'sent' ? t.booking.successTitle : t.booking.mailtoTitle}
+          {sent ? t.booking.successTitle : t.booking.mailtoTitle}
         </h3>
         <p className="mt-3 text-[15px] leading-[1.75] text-ink-soft">
-          {state.status === 'sent' ? t.booking.successBody : t.booking.mailtoBody}
+          {sent ? t.booking.successBody : t.booking.mailtoBody}
         </p>
         {state.status === 'mailto' ? (
           <a
@@ -138,6 +168,17 @@ export default function BookingForm({ t, locale }: { t: Dictionary; locale: Loca
             {t.booking.mailtoCta}
           </a>
         ) : null}
+        {/* A phone call is always the faster route. */}
+        <p className="mt-6 text-[14px] text-ink-soft">
+          {sent ? t.booking.successCall : t.booking.mailtoOr}
+        </p>
+        <CallButton
+          variant={sent ? 'solid' : 'outline'}
+          label={t.nav.call}
+          sublabel={clinic.primaryPhone}
+          cta={sent ? 'success' : 'mailto'}
+          className="mt-3"
+        />
       </div>
     );
   }
@@ -209,18 +250,30 @@ export default function BookingForm({ t, locale }: { t: Dictionary; locale: Loca
         />
       </Field>
 
-      <Field id="gender" label={t.booking.gender} error={message('gender')}>
-        <select id="gender" name="gender" required defaultValue="" className={control} {...a11y('gender')}>
-          <option value="" disabled>
-            {t.booking.genderChoose}
-          </option>
-          <option value={t.booking.male}>{t.booking.male}</option>
-          <option value={t.booking.female}>{t.booking.female}</option>
-        </select>
+      <Field id="phone" label={t.booking.phone} error={message('phone')} hint={t.booking.phoneHint}>
+        <input
+          id="phone"
+          name="phone"
+          type="tel"
+          inputMode="tel"
+          required
+          autoComplete="tel"
+          dir="ltr"
+          className={`${control} tnum text-start`}
+          {...a11y('phone', 'phone-hint')}
+        />
       </Field>
 
       <Field id="country" label={t.booking.country} error={message('country')}>
-        <select id="country" name="country" required defaultValue="" className={control} {...a11y('country')}>
+        {/* Most patients are in Egypt, so it is preselected. */}
+        <select
+          id="country"
+          name="country"
+          required
+          defaultValue={t.countries[0]}
+          className={control}
+          {...a11y('country')}
+        >
           <option value="" disabled>
             {t.booking.countryChoose}
           </option>
@@ -232,18 +285,51 @@ export default function BookingForm({ t, locale }: { t: Dictionary; locale: Loca
         </select>
       </Field>
 
-      <Field id="phone" label={t.booking.phone} error={message('phone')}>
-        <input
-          id="phone"
-          name="phone"
-          type="tel"
-          inputMode="tel"
-          required
-          autoComplete="tel"
-          dir="ltr"
-          className={`${control} tnum text-start`}
-          {...a11y('phone')}
-        />
+      {/* The clinic's own question: which branch, or online? */}
+      <fieldset
+        className="sm:col-span-2"
+        aria-invalid={errors.place ? true : undefined}
+        aria-describedby={errors.place ? errorId('place') : undefined}
+      >
+        <legend className="mb-2 text-[13px] text-ink-soft">{t.booking.place}</legend>
+        <div className="grid grid-cols-2 gap-2">
+          {PLACE_VALUES.map((value, i) => (
+            <label
+              key={value}
+              className={`flex min-h-[48px] cursor-pointer items-center gap-2.5 rounded-sm border bg-paper px-3.5 py-2.5 text-[14px] text-ink transition-colors duration-(--motion-feedback) has-checked:border-sage-deep has-checked:bg-sage-wash has-focus-visible:ring-2 has-focus-visible:ring-sage-deep ${
+                errors.place ? 'border-[#8a3b32]' : 'border-line'
+              }`}
+            >
+              <input
+                // The first radio carries id="place" so the error summary can
+                // move focus to the group.
+                id={i === 0 ? 'place' : undefined}
+                type="radio"
+                name="place"
+                required
+                value={value}
+                onChange={onPlaceChange}
+                className="h-4 w-4 shrink-0 accent-sage-deep"
+              />
+              {t.booking.placeOptions[value]}
+            </label>
+          ))}
+        </div>
+        {errors.place ? (
+          <p id={errorId('place')} className="mt-1.5 text-[13px] text-[#8a3b32]">
+            {message('place')}
+          </p>
+        ) : null}
+      </fieldset>
+
+      <Field id="gender" label={t.booking.gender} error={message('gender')}>
+        <select id="gender" name="gender" required defaultValue="" className={control} {...a11y('gender')}>
+          <option value="" disabled>
+            {t.booking.genderChoose}
+          </option>
+          <option value={t.booking.male}>{t.booking.male}</option>
+          <option value={t.booking.female}>{t.booking.female}</option>
+        </select>
       </Field>
 
       <Field id="dob" label={t.booking.dob} error={message('dob')}>
@@ -270,12 +356,23 @@ export default function BookingForm({ t, locale }: { t: Dictionary; locale: Loca
       </Field>
 
       {state.status === 'error' ? (
-        <p role="alert" className="text-[13.5px] text-[#8a3b32] sm:col-span-2">
-          {t.booking.errorGeneric}
-        </p>
+        <div role="alert" className="sm:col-span-2">
+          <p className="text-[13.5px] text-[#8a3b32]">{t.booking.errorGeneric}</p>
+          <CallButton
+            variant="outline"
+            label={t.nav.call}
+            sublabel={clinic.primaryPhone}
+            cta="error"
+            className="mt-3"
+          />
+        </div>
       ) : null}
 
       <div className="sm:col-span-2">
+        {/* Urgent cases go by phone, never through a form that waits. */}
+        <p className="mb-4 text-[13px] leading-[1.7] text-ink-mute">
+          {t.booking.formUrgent} {t.clinics.urgent.safety}
+        </p>
         <button
           type="submit"
           disabled={pending}

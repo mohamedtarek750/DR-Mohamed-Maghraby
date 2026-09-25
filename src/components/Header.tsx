@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import type { Dictionary, Locale } from '@/content/dictionary';
-import { verified } from '@/content/site';
+import { clinic, verified } from '@/content/site';
+import CallButton from './CallButton';
 import { CloseIcon, MenuIcon } from './Icons';
 
 export default function Header({ t, locale }: { t: Dictionary; locale: Locale }) {
@@ -34,6 +35,7 @@ export default function Header({ t, locale }: { t: Dictionary; locale: Locale })
     { href: '#about', label: t.nav.about },
     { href: '#fields', label: t.nav.fields },
     { href: '#approach', label: t.nav.approach },
+    { href: '#clinics', label: t.nav.clinics },
     { href: '#awareness', label: t.nav.awareness },
   ];
 
@@ -148,13 +150,14 @@ export default function Header({ t, locale }: { t: Dictionary; locale: Locale })
                 {link.label}
               </a>
             ))}
-            <a
-              href="#booking"
+            <CallButton
+              label={t.nav.call}
+              sublabel={clinic.primaryPhone}
+              cta="menu"
               onClick={() => setOpen(false)}
-              className="mt-6 rounded-sm bg-ink px-5 py-3.5 text-center text-sm text-paper"
-            >
-              {t.nav.book}
-            </a>
+              className="mt-6 w-full"
+            />
+            <p className="mt-2 text-center text-[13px] text-ink-mute">{t.hero.callNote}</p>
           </nav>
         </div>
       </div>

@@ -3,6 +3,7 @@ import About from '@/components/About';
 import Approach from '@/components/Approach';
 import Awareness from '@/components/Awareness';
 import Booking from '@/components/Booking';
+import Clinics from '@/components/Clinics';
 import Fields from '@/components/Fields';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
@@ -28,6 +29,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
         <About t={t} locale={typed} />
         <Fields t={t} locale={typed} />
         <Approach t={t} />
+        <Clinics t={t} locale={typed} />
         <Why t={t} />
         <Awareness t={t} locale={typed} />
         <Booking t={t} locale={typed} />

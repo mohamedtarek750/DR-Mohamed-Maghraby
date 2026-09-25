@@ -1,10 +1,15 @@
 import type { Dictionary, Locale } from '@/content/dictionary';
-import { pending, verified } from '@/content/site';
+import { clinic, verified } from '@/content/site';
 import BookingForm from './BookingForm';
+import CallButton from './CallButton';
 import { MailIcon } from './Icons';
 import Reveal from './Reveal';
 import ThoughtField from './ThoughtField';
 
+/**
+ * The contact hub. Phones first, because calling is how most patients book;
+ * the form second, for anyone who can't call right now.
+ */
 export default function Booking({ t, locale }: { t: Dictionary; locale: Locale }) {
   return (
     <section
@@ -23,13 +28,35 @@ export default function Booking({ t, locale }: { t: Dictionary; locale: Locale }
               <h2 className="font-display mt-4 text-[2rem] leading-[1.15] text-ink sm:text-[2.7rem] rtl:leading-[1.35]">
                 {t.booking.heading}
               </h2>
-              <p className="mt-5 max-w-[42ch] text-[15.5px] leading-[1.8] text-ink-soft">
+              <p className="mt-5 max-w-[44ch] text-[15.5px] leading-[1.8] text-ink-soft">
                 {t.booking.body}
               </p>
             </Reveal>
 
-            <Reveal delay={140}>
-              <div className="mt-9 border-t border-line pt-6">
+            <Reveal delay={100}>
+              <div className="mt-8">
+                <p className="eyebrow">{t.booking.phonesLabel}</p>
+                <ul className="mt-3 grid gap-2">
+                  {clinic.phones.map((n, i) => (
+                    <li key={n}>
+                      <CallButton
+                        variant="row"
+                        phone={n}
+                        label={n}
+                        cta={`booking-${i + 1}`}
+                      />
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-4 text-[14px] text-ink">
+                  {t.booking.hoursLine} {clinic.contactHours[locale]}
+                </p>
+                <p className="mt-1 text-[13px] text-ink-mute">{t.booking.busyHint}</p>
+              </div>
+            </Reveal>
+
+            <Reveal delay={160}>
+              <div className="mt-8 border-t border-line pt-6">
                 <p className="eyebrow">{t.booking.emailLabel}</p>
                 <a
                   href={`mailto:${verified.email}`}
@@ -44,32 +71,8 @@ export default function Booking({ t, locale }: { t: Dictionary; locale: Locale }
               </div>
             </Reveal>
 
-            {/* Clinic addresses and hours render only when supplied in site.ts.
-                They are not published anywhere public, so nothing is guessed. */}
-            {pending.clinics?.length ? (
-              <div className="mt-8 border-t border-line pt-6">
-                {pending.clinics.map((clinic) => (
-                  <div key={clinic.name} className="mb-5 last:mb-0">
-                    <p className="text-[14.5px] font-medium text-ink">{clinic.name}</p>
-                    <p className="mt-1 text-[14px] text-ink-soft">{clinic.address}</p>
-                  </div>
-                ))}
-              </div>
-            ) : null}
-
-            {pending.hours?.length ? (
-              <dl className="mt-8 border-t border-line pt-6">
-                {pending.hours.map((slot) => (
-                  <div key={slot.days} className="flex justify-between gap-6 py-1.5 text-[14px]">
-                    <dt className="text-ink-soft">{slot.days}</dt>
-                    <dd className="tnum text-ink">{slot.time}</dd>
-                  </div>
-                ))}
-              </dl>
-            ) : null}
-
-            <Reveal delay={220}>
-              <p className="mt-9 max-w-[44ch] border-s-2 border-clay/50 ps-4 text-[13px] leading-[1.7] text-ink-mute">
+            <Reveal delay={200}>
+              <p className="mt-8 max-w-[44ch] border-s-2 border-clay/50 ps-4 text-[13px] leading-[1.7] text-ink-mute">
                 {t.booking.disclaimer}
               </p>
             </Reveal>
@@ -77,7 +80,13 @@ export default function Booking({ t, locale }: { t: Dictionary; locale: Locale }
 
           <div className="lg:col-span-6 lg:col-start-7">
             <Reveal delay={120}>
-              <div className="rounded-sm border border-line bg-paper/85 p-6 backdrop-blur-sm sm:p-9">
+              <div
+                id="booking-form"
+                className="scroll-mt-24 rounded-sm border border-line bg-paper/85 p-6 backdrop-blur-sm sm:p-9"
+              >
+                <h3 className="font-display text-[1.4rem] text-ink">{t.booking.formTitle}</h3>
+                <p className="mt-2 text-[15px] leading-[1.7] text-ink-soft">{t.booking.formBody}</p>
+                <p className="mt-2 mb-7 text-[13px] leading-[1.7] text-ink-mute">{t.booking.formHint}</p>
                 <BookingForm t={t} locale={locale} />
               </div>
             </Reveal>

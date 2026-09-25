@@ -16,7 +16,7 @@ things set him apart, and both can be proven:
    Proof: the platforms themselves.
 
 Everything else we say must trace back to `src/content/site.ts`. If a claim is
-not in `verified`, it does not go on the site.
+not in `verified` or `clinic` there, it does not go on the site.
 
 **Primary message:** Not sure if it is psychological or neurological? He works
 in both.
@@ -29,7 +29,7 @@ plain, often Egyptian, Arabic: *الدكتور النفسي بيفكر إزاي�
 
 | Trait | Means | Do | Don't |
 | --- | --- | --- | --- |
-| Plain | Short sentences, everyday words | "تترك بياناتك، ويتصل بك فريق العيادة." | "نسعى لتقديم تجربة رعاية متكاملة" |
+| Plain | Short sentences, everyday words | "اتصل بأي رقم من أرقام العيادة." | "نسعى لتقديم تجربة رعاية متكاملة" |
 | Specific | Name the real thing | "القلق واضطراب ثنائي القطب" | "مجموعة واسعة من الحالات" |
 | Calm | State facts, don't alarm | "في الحالات الطارئة توجّه إلى أقرب مستشفى." | "لا تدع القلق يدمر حياتك" |
 | Honest | Only what can be shown | "له أكثر من ٥٠ فيديو على يوتيوب" | Ratings, patient counts, success rates |

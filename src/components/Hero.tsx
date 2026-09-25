@@ -1,7 +1,8 @@
 import Image from 'next/image';
 import type { CSSProperties } from 'react';
 import type { Dictionary, Locale } from '@/content/dictionary';
-import { socialList, verified } from '@/content/site';
+import { clinic, socialList, verified } from '@/content/site';
+import CallButton from './CallButton';
 import { socialIcons } from './Icons';
 import ThoughtField from './ThoughtField';
 
@@ -51,19 +52,21 @@ export default function Hero({ t, locale }: { t: Dictionary; locale: Locale }) {
               className="mt-9 grid gap-3 animate-rise sm:flex sm:flex-wrap sm:items-center"
               style={rise(420)}
             >
+              <CallButton
+                label={t.hero.primary}
+                sublabel={clinic.primaryPhone}
+                cta="hero"
+              />
               <a
-                href="#booking"
-                className="rounded-sm bg-ink px-6 py-3.5 text-center text-sm text-paper transition-colors duration-(--motion-feedback) hover:bg-sage-deep"
-              >
-                {t.hero.primary}
-              </a>
-              <a
-                href={`mailto:${verified.email}`}
-                className="rounded-sm border border-ink/25 px-6 py-3.5 text-center text-sm text-ink transition-colors duration-(--motion-feedback) hover:border-ink hover:bg-ink hover:text-paper"
+                href="#clinics"
+                className="flex items-center justify-center rounded-sm border border-ink/25 px-6 py-3.5 text-center text-sm text-ink transition-colors duration-(--motion-feedback) hover:border-ink hover:bg-ink hover:text-paper"
               >
                 {t.hero.secondary}
               </a>
             </div>
+            <p className="mt-3 text-[13px] text-ink-mute animate-rise" style={rise(470)}>
+              {t.hero.callNote}
+            </p>
 
             {/* Public follower counts: who watches his videos. Never framed as
                 clinical outcomes. */}

@@ -33,6 +33,7 @@ first-party public source and is recorded in one place:
 | File | What it holds |
 | --- | --- |
 | `src/content/site.ts` → `verified` | Facts confirmed from the doctor's own site, Instagram bio, Facebook page, TikTok and YouTube |
+| `src/content/site.ts` → `clinic` | Phones, call times, branches, clinic hours, online and urgent visits, from the clinic's own published contact text |
 | `src/content/site.ts` → `pending` | Information that could **not** be verified publicly — every value is `null` |
 | `src/content/dictionary.ts` | All Arabic and English copy |
 
@@ -44,6 +45,12 @@ first-party public source and is recorded in one place:
 - TikTok `@mohamed.maghrabyy` — "Doctor / Neuropsychiatrist", 56.1K followers
 - YouTube `@Dr.MohamedMaghraby` — "دكتور مخ و أعصاب و أمراض نفسية.", 7.8K subscribers; featured episodes confirmed through YouTube's oEmbed API with their exact published titles
 
+- The clinic's own published contact text, supplied by the site owner on 2026-09-25: the four
+  phone numbers, the 1 pm to 11 pm call window, the Mohandessin and Fifth Settlement (CMC)
+  branches with their addresses, days, hours and map links, online consultations over Zoom,
+  and urgent visits without prior booking. Both map links were resolved to confirm where they
+  point.
+
 Follower counts are shown as the reach of his public health education — never as clinical statistics.
 
 ### What still needs the doctor's input
@@ -54,20 +61,39 @@ appears automatically — no component changes needed.
 
 | Field | Where it appears once filled |
 | --- | --- |
-| `phone`, `whatsapp` | Contact & booking |
-| `clinics` (names + addresses) | Booking section |
-| `hours` | Booking section |
+| `whatsapp` | Nowhere yet. The published text lists the numbers for calls only |
 | `subspecialties` | Fields of care |
 | `articles` | Public education |
 | `credentials`, `yearsOfExperience` | Reserved for the profile section |
+
+### Please confirm with the clinic
+
+- **Which number should lead.** Every single "Call to book" button dials `clinic.primaryPhone`
+  (01142009433, the first in the clinic's list). All four are listed in the booking section
+  and the footer.
+- **How an urgent visit works** (call first or walk in, and at which branch). The source only
+  says one is available without prior booking, so the site says to call and ask.
+- **The safety wording** in the urgent note: "if you think it may be a stroke" and "if you are
+  afraid you might harm yourself or someone else, go to the nearest hospital".
+- **The CMC address in structured data.** The page says "CMC" exactly as the clinic does. The
+  street, postcode and "Cairo Medical Center" come from Google's listing for the clinic's own
+  map link and are used only in search data.
+- **Whether gender and date of birth can become optional** in the form. They are still
+  required, as on the original booking form.
+- **Google Business Profiles** for each branch, using the same name, address and number.
 
 The site intentionally shows **no** testimonials, ratings, patient numbers, success rates,
 degrees, hospital affiliations or awards. Please add only what can be confirmed.
 
 ## Booking
 
-The form mirrors the doctor's existing waiting-list flow (first name, last name, gender,
-country, phone, date of birth, plus an optional note) and is handled by a server action in
+Calling is the main way to book: the hero, the sticky mobile bar, the menu, the booking
+steps and the clinics section all dial the clinic, with the 1 pm to 11 pm call window shown
+next to the button. The booking section lists all four numbers.
+
+The form is the fallback for anyone who can't call right now. It asks for name, phone,
+where the visitor wants to be seen (Mohandessin, Fifth Settlement, online, or not sure yet),
+country, gender, date of birth and an optional note, and is handled by a server action in
 `src/lib/actions.ts`:
 
 - **With `BOOKING_WEBHOOK_URL` set**, each request is POSTed there as JSON — point it at
@@ -93,8 +119,11 @@ See `.env.example`. Both are optional; the site builds and runs without either.
 
 Per-locale titles and descriptions, canonical URLs, `hreflang` alternates (`ar`, `en`,
 `x-default`), Open Graph and Twitter cards with a share image per language, `robots.txt`,
-`sitemap.xml`, and JSON-LD (`Person`, `MedicalBusiness`/`Physician`, `WebSite`).
-The structured data contains only verified facts — no address, telephone, hours or ratings.
+`sitemap.xml`, and JSON-LD (`Person`, `MedicalOrganization`, one `MedicalClinic` per branch,
+`WebSite`). The structured data uses only facts from `verified` and `clinic`: the four phone
+numbers, each branch's address and clinic hours, and the Mohandessin map pin. The one exception
+is the CMC street and postcode, taken from Google's listing for the clinic's own map link (see
+"Please confirm with the clinic" above). There are no ratings or reviews.
 
 ## Share cards
 

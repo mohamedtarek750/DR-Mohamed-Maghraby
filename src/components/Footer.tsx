@@ -1,6 +1,7 @@
 import type { Dictionary, Locale } from '@/content/dictionary';
-import { socialList, verified } from '@/content/site';
-import { MailIcon, socialIcons } from './Icons';
+import { clinic, socialList, verified } from '@/content/site';
+import { telHref } from '@/lib/phone';
+import { MailIcon, PhoneIcon, socialIcons } from './Icons';
 
 export default function Footer({ t, locale }: { t: Dictionary; locale: Locale }) {
   const year = new Date().getFullYear();
@@ -15,14 +16,53 @@ export default function Footer({ t, locale }: { t: Dictionary; locale: Locale })
             <p className="mt-4 max-w-[34ch] text-[13.5px] leading-[1.7] text-ink-soft">
               {verified.practice[locale]}. {verified.disciplines[locale]}.
             </p>
+
+            <p className="eyebrow mt-8">{t.footer.clinicsTitle}</p>
+            <ul className="mt-3 space-y-2 text-[13.5px] leading-[1.6]">
+              {clinic.branches.map((b) => (
+                <li key={b.id}>
+                  <a
+                    href={`#clinic-${b.id}`}
+                    className="text-ink-soft transition-colors hover:text-sage-deep"
+                  >
+                    <span className="text-ink">{b.area[locale]}:</span> {b.address[locale]}
+                  </a>
+                </li>
+              ))}
+              <li>
+                <a href="#clinic-online" className="text-ink-soft transition-colors hover:text-sage-deep">
+                  {t.footer.online}
+                </a>
+              </li>
+            </ul>
           </div>
 
           <div className="lg:col-span-3">
             <p className="eyebrow">{t.footer.contact}</p>
+            <ul className="mt-3 space-y-1">
+              {clinic.phones.map((n) => (
+                <li key={n}>
+                  <a
+                    href={telHref(n)}
+                    className="inline-flex items-center gap-2 py-1 text-[14px] text-ink-soft transition-colors hover:text-sage-deep"
+                  >
+                    <span className="h-3.5 w-3.5 shrink-0">
+                      <PhoneIcon />
+                    </span>
+                    <span dir="ltr" className="tnum">
+                      {n}
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-2 text-[12.5px] text-ink-mute">
+              {t.footer.callHours} {clinic.contactHours[locale]}
+            </p>
             <a
               href={`mailto:${verified.email}`}
               dir="ltr"
-              className="mt-3 inline-flex items-center gap-2 text-[13.5px] break-all text-ink-soft transition-colors hover:text-ink"
+              className="mt-4 inline-flex items-center gap-2 text-[13.5px] break-all text-ink-soft transition-colors hover:text-ink"
             >
               <span className="h-3.5 w-3.5 shrink-0">
                 <MailIcon />

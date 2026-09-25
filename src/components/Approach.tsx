@@ -1,4 +1,5 @@
 import type { Dictionary } from '@/content/dictionary';
+import CallButton from './CallButton';
 import Reveal from './Reveal';
 
 export default function Approach({ t }: { t: Dictionary }) {
@@ -32,6 +33,22 @@ export default function Approach({ t }: { t: Dictionary }) {
             </Reveal>
           ))}
         </ol>
+
+        <Reveal delay={120}>
+          <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-4">
+            <CallButton
+              label={t.nav.call}
+              sublabel={t.nav.callHoursShort}
+              cta="approach"
+            />
+            <a
+              href="#booking-form"
+              className="text-[14px] text-sage-deep underline decoration-line underline-offset-4 transition-colors hover:text-ink hover:decoration-sage"
+            >
+              {t.approach.formLink}
+            </a>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

@@ -50,6 +50,23 @@ export function MailIcon({ className = '' }: IconProps) {
   );
 }
 
+export function PhoneIcon({ className = '' }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className={`${base} ${className}`}>
+      <path d="M5.2 3.5h3.1l1.6 4-2 1.3a11 11 0 0 0 7.3 7.3l1.3-2 4 1.6v3.1a1.7 1.7 0 0 1-1.8 1.7A16.6 16.6 0 0 1 3.5 5.3a1.7 1.7 0 0 1 1.7-1.8Z" />
+    </svg>
+  );
+}
+
+export function PinIcon({ className = '' }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className={`${base} ${className}`}>
+      <path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11Z" />
+      <circle cx="12" cy="10" r="2.3" />
+    </svg>
+  );
+}
+
 export function ArrowIcon({ className = '' }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className={`${base} ${className}`}>

@@ -4,14 +4,21 @@
  * means the two can never disagree about what a valid request is.
  */
 
+/** Also the order of the error summary. */
 export const BOOKING_FIELDS = [
   'firstName',
   'lastName',
-  'gender',
-  'country',
   'phone',
+  'country',
+  'place',
+  'gender',
   'dob',
 ] as const;
+
+/** Where the visitor wants to be seen: the clinic's own question,
+ *  "تحب احجز لحضرتك في فرع ايه؟". */
+export const PLACE_VALUES = ['mohandessin', 'new-cairo', 'online', 'undecided'] as const;
+export type Place = (typeof PLACE_VALUES)[number];
 
 export type BookingField = (typeof BOOKING_FIELDS)[number];
 
@@ -30,6 +37,8 @@ const text = (value: FormDataEntryValue | null) =>
 export function validateField(field: BookingField, raw: string): BookingErrorKey | null {
   const value = raw.trim();
   if (!value) return field;
+
+  if (field === 'place' && !(PLACE_VALUES as readonly string[]).includes(value)) return 'place';
 
   if (field === 'phone') {
     // Numbers are written many ways (+20, spaces, dashes); count digits only.

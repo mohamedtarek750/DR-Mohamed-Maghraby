@@ -1,7 +1,8 @@
 'use server';
 
 import { verified } from '@/content/site';
-import { validateBooking, type BookingErrors } from './booking';
+import { getDictionary } from '@/content/dictionary';
+import { validateBooking, type BookingErrors, type Place } from './booking';
 
 export type BookingState =
   | { status: 'idle' }
@@ -30,11 +31,16 @@ export async function submitBooking(
     phone: clean(formData.get('phone')),
     dob: clean(formData.get('dob')),
     notes: clean(formData.get('notes')),
-    locale: clean(formData.get('locale')) || 'ar',
+    place: clean(formData.get('place')),
+    locale: clean(formData.get('locale')) === 'en' ? ('en' as const) : ('ar' as const),
   };
 
   const errors = validateBooking(formData);
   if (Object.keys(errors).length) return { status: 'invalid', errors };
+
+  // Validation guarantees `place` is one of PLACE_VALUES by this point. The
+  // readable label travels with the key so the clinic never has to decode it.
+  const placeLabel = getDictionary(data.locale).booking.placeOptions[data.place as Place];
 
   const webhook = process.env.BOOKING_WEBHOOK_URL;
 
@@ -43,7 +49,7 @@ export async function submitBooking(
       const response = await fetch(webhook, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ ...data, submittedAt: new Date().toISOString() }),
+        body: JSON.stringify({ ...data, placeLabel, submittedAt: new Date().toISOString() }),
       });
       if (!response.ok) return { status: 'error' };
       return { status: 'sent' };
@@ -60,6 +66,7 @@ export async function submitBooking(
         `النوع: ${data.gender}`,
         `الدولة: ${data.country}`,
         `رقم الهاتف: ${data.phone}`,
+        `مكان الكشف: ${placeLabel}`,
         `تاريخ الميلاد: ${data.dob}`,
         data.notes ? `ملاحظة: ${data.notes}` : '',
       ]
@@ -68,6 +75,7 @@ export async function submitBooking(
         `Gender: ${data.gender}`,
         `Country: ${data.country}`,
         `Phone: ${data.phone}`,
+        `Where: ${placeLabel}`,
         `Date of birth: ${data.dob}`,
         data.notes ? `Note: ${data.notes}` : '',
       ];
