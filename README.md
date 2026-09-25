@@ -1,0 +1,97 @@
+# Dr. Mohamed Maghraby — Website
+
+The bilingual (Arabic / English) website for **Dr. Mohamed Maghraby, Neuropsychiatrist** —
+_دكتور أمراض نفسية وعصبية_ — and Dr. Mohamed Maghraby Clinics.
+
+Arabic is the default and is served right-to-left at `/ar`; English is left-to-right at `/en`.
+Visitors arriving at `/` are sent to Arabic unless their browser asks only for English.
+
+## Stack
+
+- **Next.js 16** (App Router, Turbopack) · **React 19** · **TypeScript**
+- **Tailwind CSS 4** — design tokens live in `src/app/globals.css` under `@theme`
+- Fonts via `next/font`: IBM Plex Sans Arabic, IBM Plex Sans, Source Serif 4
+- No UI or icon libraries — icons are inline SVG in `src/components/Icons.tsx`
+
+```bash
+npm install
+npm run dev        # http://localhost:3000
+npm run build      # production build
+npm run lint
+npm run typecheck
+```
+
+## Content policy: verified facts only
+
+This is a medical website, so **nothing on it is invented.** Every fact comes from a
+first-party public source and is recorded in one place:
+
+| File | What it holds |
+| --- | --- |
+| `src/content/site.ts` → `verified` | Facts confirmed from the doctor's own site, Instagram bio, Facebook page, TikTok and YouTube |
+| `src/content/site.ts` → `pending` | Information that could **not** be verified publicly — every value is `null` |
+| `src/content/dictionary.ts` | All Arabic and English copy |
+
+### Sources used
+
+- `mohamedmaghraby.com` — title "Neuropsychiatrist", "Dr. Mohamed Maghraby Clinics", Neurology & Psychiatry, waiting-list booking flow, portrait and logo
+- Instagram `@mohamed.maghrabyy` (verified) — "Neuropsychiatrist - دكتور أمراض نفسيه و عصبيه", inquiry email, 520K followers
+- Facebook page `Dr.MohamedMaghraby` — category "Doctor", 5.2M followers
+- TikTok `@mohamed.maghrabyy` — "Doctor / Neuropsychiatrist", 56.1K followers
+- YouTube `@Dr.MohamedMaghraby` — "دكتور مخ و أعصاب و أمراض نفسية.", 7.8K subscribers; featured episodes confirmed through YouTube's oEmbed API with their exact published titles
+
+Follower counts are shown as the reach of his public health education — never as clinical statistics.
+
+### What still needs the doctor's input
+
+These are deliberately left out of the site because no public source confirms them.
+Fill any value in `pending` inside `src/content/site.ts` and the matching part of the page
+appears automatically — no component changes needed.
+
+| Field | Where it appears once filled |
+| --- | --- |
+| `phone`, `whatsapp` | Contact & booking |
+| `clinics` (names + addresses) | Booking section |
+| `hours` | Booking section |
+| `subspecialties` | Fields of care |
+| `articles` | Public education |
+| `credentials`, `yearsOfExperience` | Reserved for the profile section |
+
+The site intentionally shows **no** testimonials, ratings, patient numbers, success rates,
+degrees, hospital affiliations or awards. Please add only what can be confirmed.
+
+## Booking
+
+The form mirrors the doctor's existing waiting-list flow (first name, last name, gender,
+country, phone, date of birth, plus an optional note) and is handled by a server action in
+`src/lib/actions.ts`:
+
+- **With `BOOKING_WEBHOOK_URL` set**, each request is POSTed there as JSON — point it at
+  Zapier, Make, n8n, a CRM, or any endpoint that accepts JSON.
+- **Without it**, the visitor is handed a pre-filled email addressed to the clinic's
+  published inquiry address. Nothing is lost, and no secret is needed to deploy.
+
+A honeypot field filters basic spam.
+
+## Environment variables
+
+See `.env.example`. Both are optional; the site builds and runs without either.
+
+| Variable | Purpose |
+| --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | Canonical origin for metadata, sitemap and Open Graph. Set this to the custom domain once one is attached. |
+| `BOOKING_WEBHOOK_URL` | Where booking requests are delivered (server-side only, never exposed to the browser). |
+
+## SEO
+
+Per-locale titles and descriptions, canonical URLs, `hreflang` alternates (`ar`, `en`,
+`x-default`), Open Graph and Twitter cards with a generated share image, `robots.txt`,
+`sitemap.xml`, and JSON-LD (`Person`, `MedicalBusiness`/`Physician`, `WebSite`).
+The structured data contains only verified facts — no address, telephone, hours or ratings.
+
+## Accessibility & motion
+
+Semantic landmarks, a skip link, one `h1` per page, labelled form fields, visible focus
+states, and a mobile menu that is `inert` when closed. All motion — the scroll reveals and
+the background "thought field" — is disabled under `prefers-reduced-motion`, and the canvas
+pauses whenever it is off screen.

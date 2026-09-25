@@ -1,0 +1,175 @@
+@import 'tailwindcss';
+
+@theme {
+  /* ---- Surfaces: warm, paper-like, never clinical white ---- */
+  --color-ivory: #f4f0e8;
+  --color-paper: #fbf8f2;
+  --color-paper-deep: #ece6db;
+
+  /* ---- Ink: warm near-black with a green undertone ---- */
+  --color-ink: #191d18;
+  --color-ink-soft: #4d544a;
+  --color-ink-mute: #7d8378;
+
+  /* ---- Accent: muted sage / deep olive. Used sparingly. ---- */
+  --color-sage: #75846a;
+  --color-sage-deep: #3a4535;
+  --color-sage-wash: #e6e7dd;
+
+  /* ---- Warm neutral for lines and quiet detail ---- */
+  --color-clay: #b6a893;
+  --color-line: #ddd6c8;
+
+  --font-sans: var(--font-plex-sans), system-ui, sans-serif;
+  --font-arabic: var(--font-plex-arabic), system-ui, sans-serif;
+  --font-serif: var(--font-source-serif), Georgia, serif;
+
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+
+  --ease-calm: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  * {
+    border-color: var(--color-line);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-ivory);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* Arabic sets the whole page in the Arabic family; it carries Latin
+     numerals and punctuation well enough to avoid a second font swap. */
+  [dir='rtl'] body,
+  [dir='rtl'] .font-display {
+    font-family: var(--font-arabic);
+  }
+
+  /* Latin display type is the editorial serif; Arabic keeps Plex Arabic
+     at a light weight, which reads more elegantly than a faux serif. */
+  .font-display {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    letter-spacing: -0.015em;
+  }
+
+  [dir='rtl'] .font-display {
+    font-weight: 300;
+    letter-spacing: 0;
+  }
+
+  ::selection {
+    background-color: var(--color-sage-deep);
+    color: var(--color-paper);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-sage-deep);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* Keep the browser's own date/select affordances legible on warm paper. */
+  input,
+  select,
+  textarea {
+    font-family: inherit;
+    color: inherit;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Editorial eyebrow: small caps label above a section heading. */
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-ink-mute);
+  }
+
+  [dir='rtl'] .eyebrow {
+    font-family: var(--font-arabic);
+    letter-spacing: 0;
+    text-transform: none;
+    font-size: 0.8125rem;
+  }
+
+  /* Paper grain — a single tiled SVG, no image request, barely there. */
+  .grain::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.4;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
+  }
+}
+
+@layer utilities {
+  /* Scroll-reveal: opacity + a short lift. Driven by IntersectionObserver
+     so it also works for content that starts in view. */
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.9s var(--ease-calm),
+      transform 0.9s var(--ease-calm);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .reveal[data-shown='true'] {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .hairline {
+    border-top: 1px solid var(--color-line);
+  }
+
+  /* Arabic numerals in Latin form inside Arabic layout, for phone/dates. */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum';
+  }
+}
