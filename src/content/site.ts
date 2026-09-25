@@ -62,17 +62,47 @@ export const verified = {
     tiktok: '56.1K',
     youtube: '7.8K',
   },
+  /** Video count on the YouTube channel page, read 2026-09-25 (58). The copy
+   *  says "more than 50" so it stays true as the channel grows. */
+  youtubeVideoCount: 58,
   /**
-   * Real episodes from his YouTube channel, confirmed via YouTube's oEmbed API.
-   * `title` is his published title, verbatim (only a trailing emoji dropped).
-   * Every episode is in Arabic. `gloss` is OUR English description for the
-   * English site — it is shown as a translation, never as his title.
+   * A line in his own words: the title of one of his YouTube Shorts, verbatim,
+   * confirmed through YouTube's oEmbed API. `translation` is OUR English
+   * rendering and is always labelled as a translation on the page.
+   */
+  quote: {
+    href: 'https://www.youtube.com/shorts/MS5XKNL9bsg',
+    text: 'تغيير الشخصية المفاجئ مش دايماً نفسية.. ليه العياط أو التصرفات الغريبة ممكن تكون جلطة؟',
+    translation:
+      'A sudden change in personality isn’t always psychological. Why can crying or strange behaviour turn out to be a stroke?',
+  },
+  /**
+   * Real videos from his YouTube channel, confirmed via YouTube's oEmbed API.
+   * `title` is his published title, verbatim (a trailing emoji dropped). Every
+   * video is in Arabic. `gloss` is OUR English description for the English
+   * site, shown as a translation and never presented as his title.
    */
   videos: [
-    { id: '4O-jUvU_wjc', title: 'ما هو اضطراب ثنائي القطب؟', gloss: 'What is bipolar disorder?' },
-    { id: '54PXt3zxRRk', title: 'اضطراب القلق العام', gloss: 'Generalized anxiety disorder' },
-    { id: '3dpWloQGd10', title: 'اسرار اللوزة الدماغية | الجزء الأول', gloss: 'The amygdala, part one' },
-    { id: 'pegB5pSW0HE', title: 'الدكتور النفسي بيفكر إزاي؟', gloss: 'How a psychiatrist thinks' },
+    {
+      href: 'https://www.youtube.com/watch?v=4O-jUvU_wjc',
+      title: 'ما هو اضطراب ثنائي القطب؟',
+      gloss: 'What is bipolar disorder?',
+    },
+    {
+      href: 'https://www.youtube.com/watch?v=54PXt3zxRRk',
+      title: 'اضطراب القلق العام',
+      gloss: 'Generalized anxiety disorder',
+    },
+    {
+      href: 'https://www.youtube.com/shorts/-fpuX6Yp46c',
+      title: 'جسمك كله بيوجعك والتحاليل سليمة؟.. السر اللي مخبيه مخك ورا الألم المجهول!',
+      gloss: 'Your whole body hurts and your tests are normal?',
+    },
+    {
+      href: 'https://www.youtube.com/watch?v=pegB5pSW0HE',
+      title: 'الدكتور النفسي بيفكر إزاي؟',
+      gloss: 'How does a psychiatrist think?',
+    },
   ],
   portrait: '/images/dr-mohamed-maghraby.png',
   logo: '/images/logo.png',

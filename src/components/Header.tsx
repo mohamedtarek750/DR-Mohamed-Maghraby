@@ -57,7 +57,7 @@ export default function Header({ t, locale }: { t: Dictionary; locale: Locale })
             <span className="font-display truncate text-[15px] text-ink sm:text-[17px]">
               {verified.name[locale]}
             </span>
-            <span className="mt-1 truncate text-[10px] tracking-[0.14em] text-ink-mute uppercase sm:text-[11px] rtl:tracking-normal rtl:text-[11px] rtl:normal-case">
+            <span className="mt-1 truncate text-[12px] tracking-[0.12em] text-ink-mute uppercase rtl:tracking-normal rtl:text-[12.5px] rtl:normal-case">
               {verified.title[locale]}
             </span>
           </Link>
@@ -81,7 +81,7 @@ export default function Header({ t, locale }: { t: Dictionary; locale: Locale })
               lang={other}
               aria-label={t.meta.switchLabel}
               className={`rounded-sm border border-line px-2.5 py-1.5 text-ink-soft transition-colors hover:border-ink-mute hover:text-ink sm:px-3 ${
-                other === 'ar' ? 'font-arabic text-[13px]' : 'text-[11px] tracking-wide sm:text-xs'
+                other === 'ar' ? 'font-arabic text-[13px]' : 'text-xs tracking-wide'
               }`}
             >
               {t.meta.switchTo}

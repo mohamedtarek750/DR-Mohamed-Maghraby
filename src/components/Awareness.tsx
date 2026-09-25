@@ -33,9 +33,9 @@ export default function Awareness({ t, locale }: { t: Dictionary; locale: Locale
                 ) : null}
                 <ul className="mt-3">
                   {verified.videos.map((video) => (
-                    <li key={video.id}>
+                    <li key={video.href}>
                       <a
-                        href={`https://www.youtube.com/watch?v=${video.id}`}
+                        href={video.href}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="group flex items-baseline gap-3 border-b border-line py-3.5 text-[14.5px] leading-[1.6] text-ink transition-colors hover:text-sage-deep"

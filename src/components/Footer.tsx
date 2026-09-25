@@ -13,7 +13,7 @@ export default function Footer({ t, locale }: { t: Dictionary; locale: Locale })
             <p className="font-display text-[1.4rem] text-ink">{verified.name[locale]}</p>
             <p className="mt-1.5 text-[13.5px] text-ink-mute">{t.footer.tagline}</p>
             <p className="mt-4 max-w-[34ch] text-[13.5px] leading-[1.7] text-ink-soft">
-              {verified.practice[locale]} — {verified.disciplines[locale]}
+              {verified.practice[locale]}. {verified.disciplines[locale]}.
             </p>
           </div>
 
@@ -42,7 +42,7 @@ export default function Footer({ t, locale }: { t: Dictionary; locale: Locale })
                       href={s.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-[13.5px] text-ink-soft transition-colors hover:text-sage-deep"
+                      className="flex items-center gap-2 py-1 text-[13.5px] text-ink-soft transition-colors hover:text-sage-deep"
                     >
                       <span className="h-4 w-4">
                         <Icon />

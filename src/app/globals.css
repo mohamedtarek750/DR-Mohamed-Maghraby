@@ -9,7 +9,9 @@
   /* ---- Ink: warm near-black with a green undertone ---- */
   --color-ink: #191d18;
   --color-ink-soft: #4d544a;
-  --color-ink-mute: #7d8378;
+  /* 4.5:1 or better on every surface it sits on (ivory, paper, paper-deep,
+     sage-wash). The previous #7d8378 was 3.4:1 and failed for small text. */
+  --color-ink-mute: #63695e;
 
   /* ---- Accent: muted sage / deep olive. Used sparingly. ---- */
   --color-sage: #75846a;
@@ -29,6 +31,21 @@
   --radius-md: 8px;
 
   --ease-calm: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  --animate-rise: rise var(--motion-enter) var(--ease-calm) both;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+}
+
+:root {
+  /* Motion tokens. Feedback is quick; content entering is slower and calm. */
+  --motion-feedback: 200ms;
+  --motion-enter: 650ms;
 }
 
 @layer base {
@@ -75,9 +92,24 @@
     letter-spacing: 0;
   }
 
+  /* Even line lengths in headings: no single orphaned word on the last line. */
+  h1,
+  h2,
+  h3,
+  blockquote {
+    text-wrap: balance;
+  }
+
   ::selection {
     background-color: var(--color-sage-deep);
     color: var(--color-paper);
+  }
+
+  button:not(:disabled),
+  [role='button'],
+  label[for],
+  select {
+    cursor: pointer;
   }
 
   :focus-visible {
@@ -113,7 +145,7 @@
   /* Editorial eyebrow: small caps label above a section heading. */
   .eyebrow {
     font-family: var(--font-sans);
-    font-size: 0.6875rem;
+    font-size: 0.75rem;
     font-weight: 500;
     letter-spacing: 0.16em;
     text-transform: uppercase;
@@ -142,12 +174,15 @@
 @layer utilities {
   /* Scroll-reveal: opacity + a short lift. Driven by IntersectionObserver
      so it also works for content that starts in view. */
+  /* Below-the-fold content fades up when scrolled to. The hero does NOT use
+     this: it uses animate-rise, which runs on first paint without waiting for
+     JavaScript, so the largest element on screen is never held back. */
   .reveal {
     opacity: 0;
-    transform: translateY(18px);
+    transform: translateY(14px);
     transition:
-      opacity 0.9s var(--ease-calm),
-      transform 0.9s var(--ease-calm);
+      opacity var(--motion-enter) var(--ease-calm),
+      transform var(--motion-enter) var(--ease-calm);
     transition-delay: var(--reveal-delay, 0ms);
   }
 
@@ -162,14 +197,9 @@
       transform: none;
     }
   }
+}
 
-  .hairline {
-    border-top: 1px solid var(--color-line);
-  }
-
-  /* Arabic numerals in Latin form inside Arabic layout, for phone/dates. */
-  .tnum {
-    font-variant-numeric: tabular-nums;
-    font-feature-settings: 'tnum';
-  }
+/* Declared with @utility so variants work (e.g. lg:tnum). */
+@utility tnum {
+  font-variant-numeric: tabular-nums;
 }

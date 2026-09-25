@@ -1,7 +1,11 @@
-import type { Dictionary } from '@/content/dictionary';
+import type { Dictionary, Locale } from '@/content/dictionary';
+import { verified } from '@/content/site';
 import Reveal from './Reveal';
 
-export default function About({ t }: { t: Dictionary }) {
+export default function About({ t, locale }: { t: Dictionary; locale: Locale }) {
+  const { quote } = verified;
+  const isArabic = locale === 'ar';
+
   return (
     <section id="about" className="scroll-mt-24 border-t border-line py-20 sm:py-28 lg:py-32">
       <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
@@ -17,7 +21,7 @@ export default function About({ t }: { t: Dictionary }) {
 
           <div className="lg:col-span-7 lg:col-start-6">
             {t.about.body.map((paragraph, i) => (
-              <Reveal key={paragraph.slice(0, 24)} delay={i * 110}>
+              <Reveal key={paragraph.slice(0, 24)} delay={i * 90}>
                 <p
                   className={
                     i === 0
@@ -32,12 +36,35 @@ export default function About({ t }: { t: Dictionary }) {
           </div>
         </div>
 
-        {/* A statement in the site's own voice. Deliberately not presented as a
-            quotation from the doctor, since no such quote is on public record. */}
-        <Reveal delay={200}>
-          <p className="font-display mt-16 max-w-[26ch] text-[1.65rem] leading-[1.3] text-sage-deep sm:mt-24 sm:max-w-[34ch] sm:text-[2.35rem] rtl:leading-[1.5]">
-            {t.about.statement}
-          </p>
+        {/* His own words: the title of one of his videos, verbatim, linked to
+            the source. On the English page our translation leads and the
+            Arabic original sits underneath, labelled. */}
+        <Reveal delay={150}>
+          <figure className="mt-16 max-w-[40ch] border-s-2 border-sage ps-6 sm:mt-24 sm:ps-8">
+            <blockquote
+              lang={isArabic ? 'ar' : 'en'}
+              className="font-display text-[1.5rem] leading-[1.4] text-sage-deep sm:text-[2.1rem] rtl:leading-[1.6]"
+            >
+              <p>{isArabic ? quote.text : quote.translation}</p>
+            </blockquote>
+            {!isArabic ? (
+              <p lang="ar" dir="rtl" className="font-arabic mt-4 text-left text-[15px] leading-[1.7] text-ink-soft">
+                {quote.text}
+              </p>
+            ) : null}
+            <figcaption className="mt-5 text-[13px] text-ink-mute">
+              {verified.name[locale]},{' '}
+              <a
+                href={quote.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline decoration-line underline-offset-4 transition-colors hover:text-sage-deep hover:decoration-sage"
+              >
+                {t.about.quoteSource}
+              </a>
+              {t.about.translatedFrom ? <span>. {t.about.translatedFrom}.</span> : null}
+            </figcaption>
+          </figure>
         </Reveal>
       </div>
     </section>

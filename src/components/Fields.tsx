@@ -1,9 +1,9 @@
-import type { Dictionary } from '@/content/dictionary';
+import type { Dictionary, Locale } from '@/content/dictionary';
 import { pending } from '@/content/site';
 import { ArrowIcon } from './Icons';
 import Reveal from './Reveal';
 
-export default function Fields({ t }: { t: Dictionary }) {
+export default function Fields({ t, locale }: { t: Dictionary; locale: Locale }) {
   return (
     <section
       id="fields"
@@ -25,12 +25,17 @@ export default function Fields({ t }: { t: Dictionary }) {
             <Reveal key={item.index} delay={i * 130}>
               <article className="group grid gap-6 border-t border-line py-10 sm:py-12 lg:grid-cols-12 lg:gap-10">
                 <div className="flex items-baseline gap-4 lg:col-span-4">
-                  <span className="font-display tnum text-[13px] text-clay">{item.index}</span>
+                  <span aria-hidden="true" className="font-display tnum text-[13px] text-ink-mute">
+                    {item.index}
+                  </span>
                   <div>
                     <h3 className="font-display text-[1.65rem] leading-tight text-ink sm:text-[2rem]">
                       {item.name}
                     </h3>
-                    <p className="mt-1.5 text-[12.5px] tracking-wide text-ink-mute">{item.latin}</p>
+                    {/* The field's name in the other language. */}
+                    <p lang={locale === 'ar' ? 'en' : 'ar'} className="mt-1.5 text-[13px] tracking-wide text-ink-mute">
+                      {item.latin}
+                    </p>
                   </div>
                 </div>
 

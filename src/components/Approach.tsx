@@ -23,7 +23,7 @@ export default function Approach({ t }: { t: Dictionary }) {
             <Reveal key={step.title} as="li" delay={i * 110} className="flex flex-col bg-ivory p-7 sm:p-8">
               <span
                 aria-hidden="true"
-                className="font-display tnum text-[2.4rem] leading-none text-clay/80"
+                className="font-display tnum text-[2.4rem] leading-none text-sage"
               >
                 {step.n}
               </span>

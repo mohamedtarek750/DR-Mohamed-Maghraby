@@ -25,8 +25,8 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
       <Header t={t} locale={typed} />
       <main id="main">
         <Hero t={t} locale={typed} />
-        <About t={t} />
-        <Fields t={t} />
+        <About t={t} locale={typed} />
+        <Fields t={t} locale={typed} />
         <Approach t={t} />
         <Why t={t} />
         <Awareness t={t} locale={typed} />

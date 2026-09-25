@@ -1,17 +1,16 @@
 'use server';
 
 import { verified } from '@/content/site';
+import { validateBooking, type BookingErrors } from './booking';
 
 export type BookingState =
   | { status: 'idle' }
-  | { status: 'invalid' }
+  | { status: 'invalid'; errors: BookingErrors }
   | { status: 'error' }
   | { status: 'sent' }
   /** No delivery endpoint is configured, so the request is handed back to the
    *  visitor as a pre-filled email to the clinic's published address. */
   | { status: 'mailto'; href: string };
-
-const REQUIRED = ['firstName', 'lastName', 'gender', 'country', 'phone', 'dob'] as const;
 
 const clean = (value: FormDataEntryValue | null) =>
   typeof value === 'string' ? value.trim().slice(0, 400) : '';
@@ -34,7 +33,8 @@ export async function submitBooking(
     locale: clean(formData.get('locale')) || 'ar',
   };
 
-  if (REQUIRED.some((field) => !data[field])) return { status: 'invalid' };
+  const errors = validateBooking(formData);
+  if (Object.keys(errors).length) return { status: 'invalid', errors };
 
   const webhook = process.env.BOOKING_WEBHOOK_URL;
 

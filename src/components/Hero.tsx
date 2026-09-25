@@ -1,9 +1,14 @@
 import Image from 'next/image';
+import type { CSSProperties } from 'react';
 import type { Dictionary, Locale } from '@/content/dictionary';
 import { socialList, verified } from '@/content/site';
 import { socialIcons } from './Icons';
-import Reveal from './Reveal';
 import ThoughtField from './ThoughtField';
+
+/** Staggered entrance that runs from CSS on first paint (see animate-rise in
+ *  globals.css). Unlike <Reveal>, it never waits for hydration, so the hero,
+ *  which holds the page's largest element, is visible as early as possible. */
+const rise = (delay: number): CSSProperties => ({ animationDelay: `${delay}ms` });
 
 export default function Hero({ t, locale }: { t: Dictionary; locale: Locale }) {
   return (
@@ -21,75 +26,82 @@ export default function Hero({ t, locale }: { t: Dictionary; locale: Locale }) {
         <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-8">
           {/* ---- Words ---- */}
           <div className="lg:col-span-7 xl:col-span-6">
-            <Reveal>
-              <p className="eyebrow">{t.hero.eyebrow}</p>
-            </Reveal>
+            <p className="eyebrow animate-rise" style={rise(0)}>
+              {t.hero.eyebrow}
+            </p>
 
-            <h1 className="font-display mt-5 text-[2.6rem] leading-[1.05] text-ink sm:text-[3.6rem] lg:text-[4.1rem] xl:text-[4.5rem] rtl:leading-[1.25]">
+            <h1 className="font-display mt-5 text-[2.6rem] leading-[1.05] text-ink sm:text-[3.6rem] lg:text-[4.1rem] xl:text-[4.4rem] rtl:text-[3.3rem] rtl:leading-[1.3] sm:rtl:text-[4.4rem] lg:rtl:text-[5.2rem]">
               {t.hero.headline.map((line, i) => (
-                <Reveal as="span" key={line} delay={120 + i * 110} className="block">
+                <span key={line} className="block animate-rise" style={rise(90 + i * 110)}>
                   {line}
-                </Reveal>
+                </span>
               ))}
             </h1>
 
-            <Reveal delay={460}>
-              <p className="mt-7 max-w-[46ch] text-[15.5px] leading-[1.75] text-ink-soft sm:text-[17px]">
-                {t.hero.lead}
-              </p>
-            </Reveal>
+            <p
+              className="mt-7 max-w-[46ch] text-[15.5px] leading-[1.75] text-ink-soft animate-rise sm:text-[17px]"
+              style={rise(320)}
+            >
+              {t.hero.lead}
+            </p>
 
-            <Reveal delay={560}>
-              {/* Full-width and stacked on phones — equal, generous tap targets —
-                  then side by side once there is room. */}
-              <div className="mt-9 grid gap-3 sm:flex sm:flex-wrap sm:items-center">
-                <a
-                  href="#booking"
-                  className="rounded-sm bg-ink px-6 py-3.5 text-center text-sm text-paper transition-colors duration-300 hover:bg-sage-deep"
-                >
-                  {t.hero.primary}
-                </a>
-                <a
-                  href={`mailto:${verified.email}`}
-                  className="rounded-sm border border-ink/25 px-6 py-3.5 text-center text-sm text-ink transition-colors duration-300 hover:border-ink hover:bg-ink hover:text-paper"
-                >
-                  {t.hero.secondary}
-                </a>
-              </div>
-            </Reveal>
+            {/* Full-width and stacked on phones (equal, generous tap targets),
+                then side by side once there is room. */}
+            <div
+              className="mt-9 grid gap-3 animate-rise sm:flex sm:flex-wrap sm:items-center"
+              style={rise(420)}
+            >
+              <a
+                href="#booking"
+                className="rounded-sm bg-ink px-6 py-3.5 text-center text-sm text-paper transition-colors duration-(--motion-feedback) hover:bg-sage-deep"
+              >
+                {t.hero.primary}
+              </a>
+              <a
+                href={`mailto:${verified.email}`}
+                className="rounded-sm border border-ink/25 px-6 py-3.5 text-center text-sm text-ink transition-colors duration-(--motion-feedback) hover:border-ink hover:bg-ink hover:text-paper"
+              >
+                {t.hero.secondary}
+              </a>
+            </div>
 
-            {/* Audience reach. Public follower counts — explicitly framed as
-                who reads his health education, never as clinical outcomes. */}
-            <Reveal delay={660}>
-              <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-4 border-t border-line pt-6">
-                <span className="text-[11px] tracking-[0.12em] text-ink-mute uppercase rtl:text-[12px] rtl:tracking-normal rtl:normal-case">
-                  {t.hero.reachLabel}
-                </span>
-                <div className="flex items-center gap-7">
-                  {verified.reach.map((r) => (
-                    <a
-                      key={r.platform}
-                      href={r.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group"
-                    >
-                      <span className="font-display tnum block text-2xl text-ink transition-colors group-hover:text-sage-deep sm:text-[1.7rem]">
-                        {r.value}
-                      </span>
-                      <span className="text-[11px] text-ink-mute">{r.platform}</span>
-                    </a>
-                  ))}
-                </div>
+            {/* Public follower counts: who watches his videos. Never framed as
+                clinical outcomes. */}
+            <div
+              className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-4 border-t border-line pt-6 animate-rise"
+              style={rise(520)}
+            >
+              <span className="text-[12px] tracking-[0.12em] text-ink-mute uppercase rtl:text-[12.5px] rtl:tracking-normal rtl:normal-case">
+                {t.hero.reachLabel}
+              </span>
+              <div className="flex items-center gap-7">
+                {verified.reach.map((r) => (
+                  <a
+                    key={r.platform}
+                    href={r.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${r.value} ${t.awareness.followers} ${t.meta.onPlatform} ${r.platform}`}
+                    className="group"
+                  >
+                    <span className="font-display tnum block text-2xl text-ink transition-colors group-hover:text-sage-deep sm:text-[1.7rem]">
+                      {r.value}
+                    </span>
+                    <span className="text-[12px] text-ink-mute">{r.platform}</span>
+                  </a>
+                ))}
               </div>
-            </Reveal>
+            </div>
           </div>
 
           {/* ---- Portrait ---- */}
           <div className="lg:col-span-5 xl:col-span-6">
-            <Reveal delay={260} className="relative mx-auto max-w-[400px] lg:ms-auto lg:me-0 lg:max-w-[440px]">
+            <div
+              className="relative mx-auto max-w-[400px] animate-rise lg:ms-auto lg:me-0 lg:max-w-[440px]"
+              style={rise(160)}
+            >
               <div className="relative">
-                {/* Warm panel, offset behind the cut-out portrait. */}
+                {/* Warm arch, offset behind the cut-out portrait. */}
                 <div
                   aria-hidden="true"
                   className="absolute inset-x-4 bottom-0 top-10 rounded-t-[200px] bg-[linear-gradient(180deg,var(--color-sage-wash),var(--color-paper-deep))]"
@@ -109,18 +121,16 @@ export default function Hero({ t, locale }: { t: Dictionary; locale: Locale }) {
                 />
               </div>
 
-              {/* Caption card — a small piece of editorial furniture that also
-                  carries the social links without a row of loose icons. */}
-              <div className="relative -mt-4 mx-auto flex max-w-[330px] items-center justify-between gap-4 rounded-sm border border-line bg-paper/90 px-4 py-3 backdrop-blur-sm">
+              {/* Caption card: carries the social links as part of the
+                  portrait's furniture rather than a loose row of icons. */}
+              <div className="relative -mt-4 mx-auto flex max-w-[340px] items-center justify-between gap-3 rounded-sm border border-line bg-paper/90 py-2 ps-4 pe-2 backdrop-blur-sm">
                 <div className="min-w-0">
                   <p className="truncate font-display text-[15px] text-ink">
                     {verified.name[locale]}
                   </p>
-                  <p className="truncate text-[11.5px] text-ink-mute">
-                    {verified.title[locale]}
-                  </p>
+                  <p className="truncate text-[12px] text-ink-mute">{verified.title[locale]}</p>
                 </div>
-                <div className="flex shrink-0 items-center gap-2.5">
+                <div className="flex shrink-0 items-center">
                   {socialList.map((s) => {
                     const Icon = socialIcons[s.key];
                     return (
@@ -129,16 +139,20 @@ export default function Hero({ t, locale }: { t: Dictionary; locale: Locale }) {
                         href={s.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        aria-label={`${verified.name[locale]} — ${s.label}`}
-                        className="h-[15px] w-[15px] text-ink-mute transition-colors hover:text-sage-deep"
+                        aria-label={`${verified.name[locale]} ${t.meta.onPlatform} ${s.label}`}
+                        // 32px hit area around a 15px glyph: clears WCAG 2.2's
+                        // 24px target minimum with room to spare on phones.
+                        className="flex h-8 w-8 items-center justify-center rounded-sm text-ink-mute transition-colors duration-(--motion-feedback) hover:bg-sage-wash hover:text-sage-deep"
                       >
-                        <Icon />
+                        <span className="h-[15px] w-[15px]">
+                          <Icon />
+                        </span>
                       </a>
                     );
                   })}
                 </div>
               </div>
-            </Reveal>
+            </div>
           </div>
         </div>
       </div>

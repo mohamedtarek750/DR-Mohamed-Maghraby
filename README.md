@@ -19,7 +19,11 @@ npm run dev        # http://localhost:3000
 npm run build      # production build
 npm run lint
 npm run typecheck
+npm run og:export  # re-render the share cards (needs Chrome or Edge installed)
 ```
+
+Voice, colour, type and imagery rules for anyone editing the site are in
+[`docs/brand-guidelines.md`](docs/brand-guidelines.md).
 
 ## Content policy: verified facts only
 
@@ -71,7 +75,10 @@ country, phone, date of birth, plus an optional note) and is handled by a server
 - **Without it**, the visitor is handed a pre-filled email addressed to the clinic's
   published inquiry address. Nothing is lost, and no secret is needed to deploy.
 
-A honeypot field filters basic spam.
+Fields are checked in the browser as the visitor leaves them and again on
+submit, with an error under each field and a summary that receives focus. The
+server runs the same rules (`src/lib/booking.ts`). What the visitor typed is
+never cleared by a failed submit. A honeypot field filters basic spam.
 
 ## Environment variables
 
@@ -85,13 +92,26 @@ See `.env.example`. Both are optional; the site builds and runs without either.
 ## SEO
 
 Per-locale titles and descriptions, canonical URLs, `hreflang` alternates (`ar`, `en`,
-`x-default`), Open Graph and Twitter cards with a generated share image, `robots.txt`,
+`x-default`), Open Graph and Twitter cards with a share image per language, `robots.txt`,
 `sitemap.xml`, and JSON-LD (`Person`, `MedicalBusiness`/`Physician`, `WebSite`).
 The structured data contains only verified facts — no address, telephone, hours or ratings.
 
+## Share cards
+
+`public/og/editorial-1200x630-{ar,en}.png` are exported from
+`assets/banners/share-card/share-card.html` by `npm run og:export`, which drives
+a local Chrome or Edge. A real browser is used because it shapes Arabic
+correctly, and most links to the site are shared in Arabic.
+
 ## Accessibility & motion
 
-Semantic landmarks, a skip link, one `h1` per page, labelled form fields, visible focus
-states, and a mobile menu that is `inert` when closed. All motion — the scroll reveals and
-the background "thought field" — is disabled under `prefers-reduced-motion`, and the canvas
-pauses whenever it is off screen.
+All text meets WCAG AA contrast (4.5:1), and nothing is set below 12px. Semantic
+landmarks, a skip link, one `h1` per page, labelled form fields, visible focus
+states, 32px or larger touch targets, and a mobile menu that is `inert` when
+closed.
+
+The hero enters with a CSS animation that runs on first paint, so it never waits
+for JavaScript. Lower sections fade in as they scroll into view, and a `<noscript>`
+rule shows them when JavaScript is off. All motion, including the background
+"thought field", is disabled under `prefers-reduced-motion`, and the canvas pauses
+whenever it is off screen.
