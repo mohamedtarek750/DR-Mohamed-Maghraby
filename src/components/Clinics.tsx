@@ -1,6 +1,6 @@
 import type { Dictionary, Locale } from '@/content/dictionary';
 import { clinic } from '@/content/site';
-import CallButton from './CallButton';
+import ContactButton from './ContactButton';
 import { ArrowIcon, PinIcon } from './Icons';
 import Reveal from './Reveal';
 
@@ -105,11 +105,21 @@ export default function Clinics({ t, locale }: { t: Dictionary; locale: Locale }
         <Reveal delay={160}>
           <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-4 border-t border-line pt-8">
             <p className="text-[15px] text-ink-soft">{c.callRow}</p>
-            <CallButton
-              label={t.nav.call}
-              sublabel={clinic.primaryPhone}
-              cta="clinics"
-            />
+            {/* Equal-height pair, stacked full width on phones (as in the hero). */}
+            <div className="grid gap-3 sm:flex sm:flex-wrap sm:items-stretch">
+              <ContactButton
+                label={t.nav.call}
+                sublabel={clinic.primaryPhone}
+                cta="clinics"
+              />
+              <ContactButton
+                channel="whatsapp"
+                variant="outline"
+                label={t.hero.whatsapp}
+                prefill={t.whatsappPrefill}
+                cta="clinics"
+              />
+            </div>
             <a
               href="#booking"
               className="text-[13.5px] text-sage-deep underline decoration-line underline-offset-4 transition-colors hover:text-ink hover:decoration-sage"

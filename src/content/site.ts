@@ -121,16 +121,20 @@ export const verified = {
  *                  New Cairo 1, Cairo Governorate 11835"
  */
 export const clinic = {
-  /** For inquiries and booking. The source does NOT say these are WhatsApp
-   *  numbers, so the site never labels them as such. */
+  /** For inquiries and booking. */
   phones: ['01142009433', '01055011901', '01020805974', '01035563448'],
-  /** First in the clinic's list; every single-button "call" CTA dials it.
+  /** Numbers that also take WhatsApp messages. All four, confirmed by the
+   *  site owner on 2026-09-26 (the published text itself didn't say). */
+  whatsapp: ['01142009433', '01055011901', '01020805974', '01035563448'],
+  /** First in the clinic's list; every single-button "call" or WhatsApp CTA
+   *  uses it.
    *  Change here if the clinic wants another line to lead. */
   primaryPhone: '01142009433',
   /** Source spelling. Used only in structured data (alternateName); the page
    *  keeps مغربي, the spelling on his verified social accounts. */
   practiceNameAsPublished: 'عيادات د. محمد المغربى',
-  /** When the phones are answered. The source gives no days, only times. */
+  /** "مواعيد التواصل": when calls and messages are answered. The source
+   *  gives no days, only times. */
   contactHours: {
     ar: 'من ١ مساءً إلى ١١ مساءً',
     en: '1 pm to 11 pm',
@@ -225,17 +229,29 @@ export const clinic = {
  * NOT PUBLICLY VERIFIABLE. Left null on purpose.
  * The UI checks each of these and renders nothing when the value is null.
  */
+/**
+ * The number every single WhatsApp button messages: the lead line when it is
+ * on WhatsApp, otherwise the first WhatsApp number. Derived, so editing
+ * `primaryPhone` can never point a WhatsApp button at a line without it.
+ */
+export const whatsappPrimary: string = (clinic.whatsapp as readonly string[]).includes(
+  clinic.primaryPhone,
+)
+  ? clinic.primaryPhone
+  : clinic.whatsapp[0];
+
+/** True when every listed number also takes WhatsApp (drives the "all four" note). */
+export const allNumbersOnWhatsApp = clinic.phones.every((n) =>
+  (clinic.whatsapp as readonly string[]).includes(n),
+);
+
 export const pending: {
-  /** Do not add wa.me links until the clinic confirms which number is on
-   *  WhatsApp. The published text lists the numbers for calls only. */
-  whatsapp: string | null;
   credentials: string[] | null;
   yearsOfExperience: number | null;
   /** Areas of care beyond the two disciplines named on his own site. */
   subspecialties: string[] | null;
   articles: { title: string; href: string; date: string }[] | null;
 } = {
-  whatsapp: null,
   credentials: null,
   yearsOfExperience: null,
   subspecialties: null,

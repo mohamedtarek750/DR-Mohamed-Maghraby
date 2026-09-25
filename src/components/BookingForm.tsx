@@ -22,7 +22,7 @@ import {
   type BookingErrors,
   type BookingField,
 } from '@/lib/booking';
-import CallButton from './CallButton';
+import ContactButton from './ContactButton';
 
 const control =
   'w-full scroll-mt-28 rounded-sm border bg-paper px-3.5 py-3 text-[15px] text-ink outline-none transition-colors duration-(--motion-feedback) placeholder:text-ink-mute/80 focus:border-sage-deep aria-invalid:border-[#8a3b32]';
@@ -168,17 +168,25 @@ export default function BookingForm({ t, locale }: { t: Dictionary; locale: Loca
             {t.booking.mailtoCta}
           </a>
         ) : null}
-        {/* A phone call is always the faster route. */}
+        {/* Calling or WhatsApp is always faster than waiting for a reply. */}
         <p className="mt-6 text-[14px] text-ink-soft">
           {sent ? t.booking.successCall : t.booking.mailtoOr}
         </p>
-        <CallButton
-          variant={sent ? 'solid' : 'outline'}
-          label={t.nav.call}
-          sublabel={clinic.primaryPhone}
-          cta={sent ? 'success' : 'mailto'}
-          className="mt-3"
-        />
+        <div className="mt-3 flex flex-wrap gap-2">
+          <ContactButton
+            variant={sent ? 'solid' : 'outline'}
+            label={t.nav.call}
+            sublabel={clinic.primaryPhone}
+            cta={sent ? 'success' : 'mailto'}
+          />
+          <ContactButton
+            channel="whatsapp"
+            variant="outline"
+            label={t.hero.whatsapp}
+            prefill={t.whatsappPrefill}
+            cta={sent ? 'success' : 'mailto'}
+          />
+        </div>
       </div>
     );
   }
@@ -358,13 +366,21 @@ export default function BookingForm({ t, locale }: { t: Dictionary; locale: Loca
       {state.status === 'error' ? (
         <div role="alert" className="sm:col-span-2">
           <p className="text-[13.5px] text-[#8a3b32]">{t.booking.errorGeneric}</p>
-          <CallButton
-            variant="outline"
-            label={t.nav.call}
-            sublabel={clinic.primaryPhone}
-            cta="error"
-            className="mt-3"
-          />
+          <div className="mt-3 flex flex-wrap gap-2">
+            <ContactButton
+              variant="outline"
+              label={t.nav.call}
+              sublabel={clinic.primaryPhone}
+              cta="error"
+            />
+            <ContactButton
+              channel="whatsapp"
+              variant="outline"
+              label={t.hero.whatsapp}
+              prefill={t.whatsappPrefill}
+              cta="error"
+            />
+          </div>
         </div>
       ) : null}
 

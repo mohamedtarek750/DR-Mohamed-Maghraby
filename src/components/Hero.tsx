@@ -2,7 +2,7 @@ import Image from 'next/image';
 import type { CSSProperties } from 'react';
 import type { Dictionary, Locale } from '@/content/dictionary';
 import { clinic, socialList, verified } from '@/content/site';
-import CallButton from './CallButton';
+import ContactButton from './ContactButton';
 import { socialIcons } from './Icons';
 import ThoughtField from './ThoughtField';
 
@@ -24,7 +24,7 @@ export default function Hero({ t, locale }: { t: Dictionary; locale: Locale }) {
       />
 
       <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
-        <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-8">
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-8">
           {/* ---- Words ---- */}
           <div className="lg:col-span-7 xl:col-span-6">
             <p className="eyebrow animate-rise" style={rise(0)}>
@@ -49,23 +49,30 @@ export default function Hero({ t, locale }: { t: Dictionary; locale: Locale }) {
             {/* Full-width and stacked on phones (equal, generous tap targets),
                 then side by side once there is room. */}
             <div
-              className="mt-9 grid gap-3 animate-rise sm:flex sm:flex-wrap sm:items-center"
+              className="mt-9 grid gap-3 animate-rise sm:flex sm:flex-wrap sm:items-stretch"
               style={rise(420)}
             >
-              <CallButton
+              <ContactButton
                 label={t.hero.primary}
                 sublabel={clinic.primaryPhone}
                 cta="hero"
               />
+              <ContactButton
+                channel="whatsapp"
+                variant="outline"
+                label={t.hero.whatsapp}
+                prefill={t.whatsappPrefill}
+                cta="hero"
+              />
+            </div>
+            <p className="mt-3 text-[13px] text-ink-mute animate-rise" style={rise(470)}>
+              {t.hero.callNote}{' '}
               <a
                 href="#clinics"
-                className="flex items-center justify-center rounded-sm border border-ink/25 px-6 py-3.5 text-center text-sm text-ink transition-colors duration-(--motion-feedback) hover:border-ink hover:bg-ink hover:text-paper"
+                className="text-sage-deep underline decoration-line underline-offset-4 transition-colors hover:text-ink hover:decoration-sage"
               >
                 {t.hero.secondary}
               </a>
-            </div>
-            <p className="mt-3 text-[13px] text-ink-mute animate-rise" style={rise(470)}>
-              {t.hero.callNote}
             </p>
 
             {/* Public follower counts: who watches his videos. Never framed as
@@ -128,10 +135,10 @@ export default function Hero({ t, locale }: { t: Dictionary; locale: Locale }) {
                   portrait's furniture rather than a loose row of icons. */}
               <div className="relative -mt-4 mx-auto flex max-w-[340px] items-center justify-between gap-3 rounded-sm border border-line bg-paper/90 py-2 ps-4 pe-2 backdrop-blur-sm">
                 <div className="min-w-0">
-                  <p className="truncate font-display text-[15px] text-ink">
+                  <p className="font-display text-[15px] text-ink sm:truncate">
                     {verified.name[locale]}
                   </p>
-                  <p className="truncate text-[12px] text-ink-mute">{verified.title[locale]}</p>
+                  <p className="text-[12px] text-ink-mute sm:truncate">{verified.title[locale]}</p>
                 </div>
                 <div className="flex shrink-0 items-center">
                   {socialList.map((s) => {

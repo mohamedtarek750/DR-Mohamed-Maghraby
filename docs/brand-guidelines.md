@@ -78,6 +78,12 @@ formal and the most literal. Headlines can ask a question. Nothing is salesy.
 All text meets WCAG AA (4.5:1). `sage` is used only at display sizes, and
 `clay` is never used for text.
 
+One colour comes from outside the palette: the WhatsApp glyph uses WhatsApp's own teal,
+`#128C7E`, so the button is recognisable at a glance. It clears 3:1 (the minimum for icons)
+on every light surface, where WhatsApp's brighter green (`#25D366`, 1.7:1) does not. Use it
+for that glyph only, never for text, fills or anything else. On the dark solid button the
+glyph takes the text colour instead.
+
 ## Type
 
 | Role | Arabic | Latin |

@@ -19,7 +19,7 @@ export const dir = (locale: Locale) => (locale === 'ar' ? 'rtl' : 'ltr');
 const ar = {
   meta: {
     title: `${verified.name.ar} | ${verified.title.ar} في المهندسين والتجمع الخامس`,
-    description: `د. محمد مغربي، دكتور أمراض نفسية وعصبية. عيادات في المهندسين والتجمع الخامس، وكشف أونلاين عبر Zoom. للحجز اتصل ${clinic.contactHours.ar}.`,
+    description: `د. محمد مغربي، دكتور أمراض نفسية وعصبية. عيادات في المهندسين والتجمع الخامس، وكشف أونلاين عبر Zoom. للحجز اتصل أو راسل العيادة على واتساب ${clinic.contactHours.ar}.`,
     langName: 'العربية',
     switchTo: 'English',
     switchLabel: 'تغيير اللغة',
@@ -35,17 +35,21 @@ const ar = {
     book: 'احجز موعدك',
     clinics: 'الفروع',
     call: 'اتصل للحجز',
+    whatsapp: 'واتساب',
     callHoursShort: clinic.contactHours.shortAr as string,
     menu: 'القائمة',
     close: 'إغلاق',
   },
+  /** Typed into WhatsApp in advance, so sending takes one tap. */
+  whatsappPrefill: 'مرحبًا، أريد حجز موعد مع د. محمد مغربي.',
   hero: {
     eyebrow: verified.practice.ar as string,
     headline: ['نفسي', 'ولا عصبي؟'],
     lead: 'بعض الأعراض تقع بين الاثنين، ويصعب أن تعرف وحدك من أين تبدأ. د. محمد مغربي دكتور أمراض نفسية وعصبية، وعياداته تعمل في المجالين.',
     primary: 'اتصل للحجز',
     secondary: 'الفروع والمواعيد',
-    callNote: `مواعيد الاتصال: ${clinic.contactHours.ar}.`,
+    whatsapp: 'احجز عبر واتساب',
+    callNote: `مواعيد التواصل: ${clinic.contactHours.ar}.`,
     portraitAlt: 'صورة د. محمد مغربي بالمعطف الأبيض',
     reachLabel: 'المتابعون',
   },
@@ -87,13 +91,13 @@ const ar = {
   approach: {
     label: 'طريقة الحجز',
     heading: 'كيف تحجز',
-    intro: 'الحجز بالهاتف، سواء للكشف في أحد الفرعين أو أونلاين.',
+    intro: 'الحجز بالهاتف أو واتساب، سواء للكشف في أحد الفرعين أو أونلاين.',
     formLink: 'لا تستطيع الاتصال الآن؟ اترك بياناتك.',
     steps: [
       {
         n: '١',
-        title: 'الاتصال',
-        body: `اتصل بأحد أرقام العيادة ${clinic.contactHours.ar}.`,
+        title: 'الاتصال أو واتساب',
+        body: `اتصل بأحد أرقام العيادة أو راسلها على واتساب، ${clinic.contactHours.ar}.`,
       },
       { n: '٢', title: 'المكان', body: 'تختار أحد الفرعين، أو الكشف أونلاين عبر Zoom.' },
       { n: '٣', title: 'الكشف', body: 'يسألك الطبيب عن الأعراض وتاريخك المرضي، ويشرح لك ما يراه.' },
@@ -111,7 +115,7 @@ const ar = {
     online: {
       title: 'الكشف أونلاين',
       body: 'متاح لأي مكان داخل مصر أو خارجها، عبر برنامج Zoom.',
-      book: 'للحجز، اتصل بالعيادة. مواعيد الاتصال بتوقيت مصر.',
+      book: 'للحجز، اتصل بالعيادة أو راسلها على واتساب. مواعيد التواصل بتوقيت مصر.',
       abroadBefore: 'من خارج مصر: اطلب',
       abroadAfter: 'ثم الرقم بدون الصفر الأول.',
     },
@@ -121,7 +125,7 @@ const ar = {
       safety:
         'الكشف المستعجل زيارة للعيادة، وليس رعاية طوارئ. إن كانت الأعراض مفاجئة أو شديدة، أو كنت تظن أنها جلطة، أو تخشى أن تؤذي نفسك أو غيرك، فتوجّه فورًا إلى أقرب مستشفى.',
     },
-    callRow: `للحجز في أي فرع أو أونلاين، اتصل ${clinic.contactHours.ar}.`,
+    callRow: `للحجز في أي فرع أو أونلاين، اتصل أو راسل العيادة على واتساب، ${clinic.contactHours.ar}.`,
     allNumbers: 'كل الأرقام',
   },
   why: {
@@ -160,9 +164,10 @@ const ar = {
   booking: {
     label: 'الحجز',
     heading: 'احجز موعدك',
-    body: 'اتصل بأي رقم من هذه الأرقام، وأخبر فريق العيادة أي فرع يناسبك، أو أنك تريد الكشف أونلاين.',
+    body: 'اتصل بأي رقم من هذه الأرقام أو راسله على واتساب، وأخبر فريق العيادة أي فرع يناسبك، أو أنك تريد الكشف أونلاين.',
     phonesLabel: 'للاستفسار والحجز',
-    hoursLine: 'مواعيد الاتصال:',
+    whatsappNote: 'كل الأرقام متاحة على واتساب.',
+    hoursLine: 'مواعيد التواصل:',
     busyHint: 'إن كان الخط مشغولًا، جرّب رقمًا آخر.',
     formTitle: 'لا تستطيع الاتصال الآن؟',
     formBody: 'اترك بياناتك، ويرد عليك فريق العيادة في أقرب وقت.',
@@ -192,8 +197,8 @@ const ar = {
     sending: 'جارٍ الإرسال…',
     successTitle: 'وصل طلبك',
     successBody: 'يرد عليك فريق العيادة في أقرب وقت.',
-    successCall: `وإن أردت ألا تنتظر، اتصل ${clinic.contactHours.ar}.`,
-    mailtoOr: 'أو اتصل بالعيادة مباشرة.',
+    successCall: `وإن أردت ألا تنتظر، اتصل أو راسل العيادة على واتساب، ${clinic.contactHours.ar}.`,
+    mailtoOr: 'أو تواصل مع العيادة مباشرة.',
     mailtoTitle: 'خطوة أخيرة: أرسل الطلب بالبريد',
     mailtoBody:
       'اضغط الزر ليفتح بريدك برسالة فيها بياناتك، ثم أرسلها إلى العيادة.',
@@ -210,7 +215,7 @@ const ar = {
       dob: 'اختر تاريخ الميلاد.',
       dobFuture: 'تاريخ الميلاد لا يمكن أن يكون في المستقبل.',
     },
-    errorGeneric: 'لم يُرسَل الطلب. جرّب مرة أخرى، أو اتصل بالعيادة.',
+    errorGeneric: 'لم يُرسَل الطلب. جرّب مرة أخرى، أو تواصل مع العيادة بالهاتف أو واتساب.',
     emailLabel: 'للاستفسار بالبريد',
     disclaimer:
       'هذا النموذج لطلب موعد، وليس للاستشارة الطبية ولا للكشف المستعجل. في الحالات الطارئة توجّه فورًا إلى أقرب مستشفى.',
@@ -225,7 +230,8 @@ const ar = {
       'بيانات نموذج الحجز تُستخدم للرد عليك بخصوص موعدك فقط، ولا تُعطى لأي جهة أخرى.',
     clinicsTitle: 'الفروع',
     online: 'أونلاين عبر Zoom',
-    callHours: 'الاتصال:',
+    callHours: 'مواعيد التواصل:',
+    whatsapp: 'واتساب',
     disclaimer: 'ما يُنشر هنا للتوعية، ولا يغني عن الكشف.',
   },
   countries: [
@@ -238,7 +244,7 @@ const ar = {
 const en: typeof ar = {
   meta: {
     title: `${verified.name.en} | ${verified.title.en} in Mohandessin and New Cairo`,
-    description: `Dr. Mohamed Maghraby, neuropsychiatrist in Mohandessin and the Fifth Settlement, plus online consultations over Zoom. Call to book, ${clinic.contactHours.en}.`,
+    description: `Dr. Mohamed Maghraby, neuropsychiatrist in Mohandessin and the Fifth Settlement, plus online Zoom consultations. Call or WhatsApp to book, ${clinic.contactHours.en}.`,
     langName: 'English',
     switchTo: 'العربية',
     switchLabel: 'Change language',
@@ -254,17 +260,20 @@ const en: typeof ar = {
     book: 'Book an appointment',
     clinics: 'Clinics',
     call: 'Call to book',
+    whatsapp: 'WhatsApp',
     callHoursShort: clinic.contactHours.shortEn,
     menu: 'Menu',
     close: 'Close',
   },
+  whatsappPrefill: 'Hello, I would like to book an appointment with Dr. Mohamed Maghraby.',
   hero: {
     eyebrow: verified.practice.en,
     headline: ['Psychological,', 'or neurological?'],
     lead: 'Some symptoms fall somewhere between the two, and it is hard to know on your own where to start. Dr. Mohamed Maghraby is a neuropsychiatrist, and his clinics work in both fields.',
     primary: 'Call to book',
     secondary: 'Clinics and hours',
-    callNote: `Call times: ${clinic.contactHours.en}.`,
+    whatsapp: 'Book on WhatsApp',
+    callNote: `Contact hours: ${clinic.contactHours.en}.`,
     portraitAlt: 'Dr. Mohamed Maghraby in a white coat',
     reachLabel: 'Followers',
   },
@@ -305,13 +314,13 @@ const en: typeof ar = {
   approach: {
     label: 'How to book',
     heading: 'Booking, step by step',
-    intro: 'You book by phone, for either branch or an online consultation.',
+    intro: 'You book by phone or WhatsApp, for either branch or an online consultation.',
     formLink: 'Can’t call right now? Leave your details.',
     steps: [
       {
         n: '1',
-        title: 'Call',
-        body: `Call one of the clinic’s numbers, ${clinic.contactHours.en}.`,
+        title: 'Call or WhatsApp',
+        body: `Call one of the clinic’s numbers or message it on WhatsApp, ${clinic.contactHours.en}.`,
       },
       { n: '2', title: 'Where', body: 'You choose one of the branches, or an online consultation over Zoom.' },
       { n: '3', title: 'Consultation', body: 'The doctor asks about your symptoms and medical history, and explains what he finds.' },
@@ -329,7 +338,7 @@ const en: typeof ar = {
     online: {
       title: 'Online consultation',
       body: 'Available anywhere, inside or outside Egypt, over Zoom.',
-      book: 'To book, call the clinic. Call times are Egypt time.',
+      book: 'To book, call the clinic or message it on WhatsApp. Contact hours are Egypt time.',
       abroadBefore: 'From outside Egypt: dial',
       abroadAfter: 'then the number without the first 0.',
     },
@@ -339,7 +348,7 @@ const en: typeof ar = {
       safety:
         'An urgent consultation is a clinic visit, not emergency care. If symptoms are sudden or severe, if you think it may be a stroke, or if you are afraid you might harm yourself or someone else, go to the nearest hospital straight away.',
     },
-    callRow: `To book at either branch or online, call ${clinic.contactHours.en}.`,
+    callRow: `To book at either branch or online, call or message on WhatsApp, ${clinic.contactHours.en}.`,
     allNumbers: 'All numbers',
   },
   why: {
@@ -378,9 +387,10 @@ const en: typeof ar = {
   booking: {
     label: 'Booking',
     heading: 'Book an appointment',
-    body: 'Call any of these numbers and tell the clinic team which branch suits you, or that you would like an online consultation.',
+    body: 'Call or WhatsApp any of these numbers and tell the clinic team which branch suits you, or that you would like an online consultation.',
     phonesLabel: 'Inquiries and booking',
-    hoursLine: 'Call times:',
+    whatsappNote: 'All four numbers are on WhatsApp.',
+    hoursLine: 'Contact hours:',
     busyHint: 'If one line is busy, try another.',
     formTitle: 'Can’t call right now?',
     formBody: 'Leave your details and the clinic team will get back to you as soon as possible.',
@@ -410,8 +420,8 @@ const en: typeof ar = {
     sending: 'Sending…',
     successTitle: 'Request received',
     successBody: 'The clinic team will get back to you as soon as possible.',
-    successCall: `If you would rather not wait, call ${clinic.contactHours.en}.`,
-    mailtoOr: 'Or call the clinic directly.',
+    successCall: `If you would rather not wait, call or message on WhatsApp, ${clinic.contactHours.en}.`,
+    mailtoOr: 'Or contact the clinic directly.',
     mailtoTitle: 'One last step: send it by email',
     mailtoBody:
       'The button opens your email with your details already filled in. Send it to the clinic from there.',
@@ -428,7 +438,7 @@ const en: typeof ar = {
       dob: 'Enter the date of birth.',
       dobFuture: 'Date of birth can’t be in the future.',
     },
-    errorGeneric: 'The request didn’t go through. Try again, or call the clinic.',
+    errorGeneric: 'The request didn’t go through. Try again, or reach the clinic by phone or WhatsApp.',
     emailLabel: 'Inquiries by email',
     disclaimer:
       'This form is for requesting an appointment. It is not for medical advice or urgent consultations. In an emergency, go to the nearest hospital straight away.',
@@ -443,7 +453,8 @@ const en: typeof ar = {
       'Details from the booking form are used only to get back to you about your appointment and are not passed to anyone else.',
     clinicsTitle: 'Clinics',
     online: 'Online over Zoom',
-    callHours: 'Calls:',
+    callHours: 'Contact hours:',
+    whatsapp: 'WhatsApp',
     disclaimer: 'What is published here is for general awareness and does not replace a consultation.',
   },
   countries: [

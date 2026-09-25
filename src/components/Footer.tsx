@@ -1,7 +1,7 @@
 import type { Dictionary, Locale } from '@/content/dictionary';
 import { clinic, socialList, verified } from '@/content/site';
-import { telHref } from '@/lib/phone';
-import { MailIcon, PhoneIcon, socialIcons } from './Icons';
+import { formatPhone, telHref, waHref } from '@/lib/phone';
+import { MailIcon, PhoneIcon, socialIcons, WhatsAppIcon } from './Icons';
 
 export default function Footer({ t, locale }: { t: Dictionary; locale: Locale }) {
   const year = new Date().getFullYear();
@@ -41,7 +41,7 @@ export default function Footer({ t, locale }: { t: Dictionary; locale: Locale })
             <p className="eyebrow">{t.footer.contact}</p>
             <ul className="mt-3 space-y-1">
               {clinic.phones.map((n) => (
-                <li key={n}>
+                <li key={n} className="flex flex-wrap items-center gap-x-4">
                   <a
                     href={telHref(n)}
                     className="inline-flex items-center gap-2 py-1 text-[14px] text-ink-soft transition-colors hover:text-sage-deep"
@@ -53,6 +53,23 @@ export default function Footer({ t, locale }: { t: Dictionary; locale: Locale })
                       {n}
                     </span>
                   </a>
+                  {(clinic.whatsapp as readonly string[]).includes(n) ? (
+                    <a
+                      href={waHref(n, t.whatsappPrefill)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 py-1 text-[13px] text-ink-soft transition-colors hover:text-sage-deep"
+                    >
+                      <span className="h-3.5 w-3.5 shrink-0 text-[#128C7E]">
+                        <WhatsAppIcon />
+                      </span>
+                      {t.footer.whatsapp}
+                      {/* Four links all saying "WhatsApp" need the number to be told apart. */}
+                      <span className="sr-only">
+                        , <span dir="ltr">{formatPhone(n)}</span>
+                      </span>
+                    </a>
+                  ) : null}
                 </li>
               ))}
             </ul>

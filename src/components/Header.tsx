@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import type { Dictionary, Locale } from '@/content/dictionary';
 import { clinic, verified } from '@/content/site';
-import CallButton from './CallButton';
+import ContactButton from './ContactButton';
 import { CloseIcon, MenuIcon } from './Icons';
 
 export default function Header({ t, locale }: { t: Dictionary; locale: Locale }) {
@@ -150,12 +150,21 @@ export default function Header({ t, locale }: { t: Dictionary; locale: Locale })
                 {link.label}
               </a>
             ))}
-            <CallButton
+            <ContactButton
               label={t.nav.call}
               sublabel={clinic.primaryPhone}
               cta="menu"
               onClick={() => setOpen(false)}
               className="mt-6 w-full"
+            />
+            <ContactButton
+              channel="whatsapp"
+              variant="outline"
+              label={t.hero.whatsapp}
+              prefill={t.whatsappPrefill}
+              cta="menu"
+              onClick={() => setOpen(false)}
+              className="mt-2 w-full"
             />
             <p className="mt-2 text-center text-[13px] text-ink-mute">{t.hero.callNote}</p>
           </nav>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import type { Dictionary } from '@/content/dictionary';
-import CallButton from './CallButton';
+import ContactButton from './ContactButton';
 
 /**
  * Booking is the point of the site, so on phones it stays one thumb-tap away.
@@ -52,22 +52,26 @@ export default function MobileCta({ t }: { t: Dictionary }) {
       }`}
     >
       <div className="flex items-center gap-2.5">
-        {/* Call first: it is how most patients book. The hours sit on the
+        {/* The two ways most patients book. The hours sit on the call
             button so nobody dials outside them. */}
-        <CallButton
+        <ContactButton
           label={t.nav.call}
           sublabel={t.nav.callHoursShort}
           cta="sticky"
+          size="compact"
           tabIndex={visible ? 0 : -1}
-          className="flex-1"
+          className="min-w-0 flex-1"
         />
-        <a
-          href="#clinics"
+        <ContactButton
+          channel="whatsapp"
+          variant="outline"
+          label={t.nav.whatsapp}
+          prefill={t.whatsappPrefill}
+          cta="sticky"
+          size="compact"
           tabIndex={visible ? 0 : -1}
-          className="flex min-h-[48px] items-center justify-center rounded-sm border border-ink/25 px-4 text-[14px] text-ink"
-        >
-          {t.nav.clinics}
-        </a>
+          className="shrink-0 self-stretch"
+        />
       </div>
     </div>
   );

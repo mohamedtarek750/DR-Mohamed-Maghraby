@@ -33,7 +33,7 @@ first-party public source and is recorded in one place:
 | File | What it holds |
 | --- | --- |
 | `src/content/site.ts` → `verified` | Facts confirmed from the doctor's own site, Instagram bio, Facebook page, TikTok and YouTube |
-| `src/content/site.ts` → `clinic` | Phones, call times, branches, clinic hours, online and urgent visits, from the clinic's own published contact text |
+| `src/content/site.ts` → `clinic` | Phones and which take WhatsApp, contact hours, branches, clinic hours, online and urgent visits, from the clinic's own published contact text |
 | `src/content/site.ts` → `pending` | Information that could **not** be verified publicly — every value is `null` |
 | `src/content/dictionary.ts` | All Arabic and English copy |
 
@@ -46,7 +46,7 @@ first-party public source and is recorded in one place:
 - YouTube `@Dr.MohamedMaghraby` — "دكتور مخ و أعصاب و أمراض نفسية.", 7.8K subscribers; featured episodes confirmed through YouTube's oEmbed API with their exact published titles
 
 - The clinic's own published contact text, supplied by the site owner on 2026-09-25: the four
-  phone numbers, the 1 pm to 11 pm call window, the Mohandessin and Fifth Settlement (CMC)
+  phone numbers, the 1 pm to 11 pm contact hours (مواعيد التواصل), the Mohandessin and Fifth Settlement (CMC)
   branches with their addresses, days, hours and map links, online consultations over Zoom,
   and urgent visits without prior booking. Both map links were resolved to confirm where they
   point.
@@ -61,16 +61,16 @@ appears automatically — no component changes needed.
 
 | Field | Where it appears once filled |
 | --- | --- |
-| `whatsapp` | Nowhere yet. The published text lists the numbers for calls only |
 | `subspecialties` | Fields of care |
 | `articles` | Public education |
 | `credentials`, `yearsOfExperience` | Reserved for the profile section |
 
 ### Please confirm with the clinic
 
-- **Which number should lead.** Every single "Call to book" button dials `clinic.primaryPhone`
-  (01142009433, the first in the clinic's list). All four are listed in the booking section
-  and the footer.
+- **Which number should lead.** Every single "Call to book" button dials, and every single
+  "Book on WhatsApp" button messages, `clinic.primaryPhone` (01142009433, the first in the
+  clinic's list), so that line receives both calls and WhatsApp bookings. All four are listed,
+  each with its own WhatsApp button, in the booking section and the footer.
 - **How an urgent visit works** (call first or walk in, and at which branch). The source only
   says one is available without prior booking, so the site says to call and ask.
 - **The safety wording** in the urgent note: "if you think it may be a stroke" and "if you are
@@ -87,9 +87,12 @@ degrees, hospital affiliations or awards. Please add only what can be confirmed.
 
 ## Booking
 
-Calling is the main way to book: the hero, the sticky mobile bar, the menu, the booking
-steps and the clinics section all dial the clinic, with the 1 pm to 11 pm call window shown
-next to the button. The booking section lists all four numbers.
+Calling and WhatsApp are the main ways to book: the hero, the sticky mobile bar, the menu,
+the booking steps and the clinics section each offer both, with the 1 pm to 11 pm contact
+hours shown. The booking section lists all four numbers, each with a WhatsApp button (all
+four are on WhatsApp, confirmed by the site owner on 2026-09-26). WhatsApp links open a chat
+with a booking message already typed. Urgent visits still point to a phone call, the
+fastest route, and emergencies to the nearest hospital.
 
 The form is the fallback for anyone who can't call right now. It asks for name, phone,
 where the visitor wants to be seen (Mohandessin, Fifth Settlement, online, or not sure yet),

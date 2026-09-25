@@ -1,5 +1,5 @@
 import type { Dictionary } from '@/content/dictionary';
-import CallButton from './CallButton';
+import ContactButton from './ContactButton';
 import Reveal from './Reveal';
 
 export default function Approach({ t }: { t: Dictionary }) {
@@ -36,11 +36,21 @@ export default function Approach({ t }: { t: Dictionary }) {
 
         <Reveal delay={120}>
           <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-4">
-            <CallButton
-              label={t.nav.call}
-              sublabel={t.nav.callHoursShort}
-              cta="approach"
-            />
+            {/* Equal-height pair, stacked full width on phones (as in the hero). */}
+            <div className="grid gap-3 sm:flex sm:flex-wrap sm:items-stretch">
+              <ContactButton
+                label={t.nav.call}
+                sublabel={t.nav.callHoursShort}
+                cta="approach"
+              />
+              <ContactButton
+                channel="whatsapp"
+                variant="outline"
+                label={t.hero.whatsapp}
+                prefill={t.whatsappPrefill}
+                cta="approach"
+              />
+            </div>
             <a
               href="#booking-form"
               className="text-[14px] text-sage-deep underline decoration-line underline-offset-4 transition-colors hover:text-ink hover:decoration-sage"

@@ -1,7 +1,7 @@
 import type { Dictionary, Locale } from '@/content/dictionary';
-import { clinic, verified } from '@/content/site';
+import { allNumbersOnWhatsApp, clinic, verified } from '@/content/site';
 import BookingForm from './BookingForm';
-import CallButton from './CallButton';
+import ContactButton from './ContactButton';
 import { MailIcon } from './Icons';
 import Reveal from './Reveal';
 import ThoughtField from './ThoughtField';
@@ -21,7 +21,7 @@ export default function Booking({ t, locale }: { t: Dictionary; locale: Locale }
       </div>
 
       <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-5">
             <Reveal>
               <p className="eyebrow">{t.booking.label}</p>
@@ -36,15 +36,31 @@ export default function Booking({ t, locale }: { t: Dictionary; locale: Locale }
             <Reveal delay={100}>
               <div className="mt-8">
                 <p className="eyebrow">{t.booking.phonesLabel}</p>
+                {allNumbersOnWhatsApp ? (
+                  <p className="mt-1.5 text-[13px] text-ink-mute">{t.booking.whatsappNote}</p>
+                ) : null}
                 <ul className="mt-3 grid gap-2">
                   {clinic.phones.map((n, i) => (
-                    <li key={n}>
-                      <CallButton
+                    <li key={n} className="flex gap-2">
+                      <ContactButton
                         variant="row"
                         phone={n}
                         label={n}
                         cta={`booking-${i + 1}`}
+                        className="flex-1"
                       />
+                      {/* The same line on WhatsApp. Its visible word plus the
+                          hidden number give it a distinct accessible name. */}
+                      {(clinic.whatsapp as readonly string[]).includes(n) ? (
+                        <ContactButton
+                          channel="whatsapp"
+                          variant="chip"
+                          phone={n}
+                          label={t.nav.whatsapp}
+                          prefill={t.whatsappPrefill}
+                          cta={`booking-${i + 1}`}
+                        />
+                      ) : null}
                     </li>
                   ))}
                 </ul>

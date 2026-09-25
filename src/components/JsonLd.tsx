@@ -9,8 +9,9 @@ import { clinic, SITE_URL, verified } from '@/content/site';
  * Deliberately absent: aggregateRating, review, award, alumniOf, priceRange,
  * availableLanguage on the phones (the source doesn't say which languages),
  * isAcceptingNewPatients, any EmergencyService (an urgent clinic visit is not
- * emergency care), any WhatsApp contact (not confirmed), and hoursAvailable
- * on the phones (the 1 pm to 11 pm call window has no days in the source).
+ * emergency care), a WhatsApp contact (schema.org has no standard property
+ * for it; the numbers themselves are listed), and hoursAvailable
+ * on the phones (the 1 pm to 11 pm contact hours have no days in the source).
  */
 export default function JsonLd({ t, locale }: { t: Dictionary; locale: Locale }) {
   const other: Locale = locale === 'ar' ? 'en' : 'ar';
